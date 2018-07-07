@@ -62,9 +62,6 @@
             window.open('about:blank').document.write("<img src='" + canvas.toDataURL() + "'/>");
         });
     });
-    $('#del_image-id').on(eventType, () => {
-        document.getElementById('maptoimg-result').innerHTML = '';
-    });
     $('#save-cookie-id').on(eventType, () => {
         if (save_area.value.length === 0) {
             return;

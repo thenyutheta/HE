@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="./images/sys/manual_favicon.png" type="images/png">
+    <title>HE manual</title>
+</head>
+
+<body>
+    <h1>Hakoniwa Editor のマニュアル</h1>
+    <a href="./index.html">＞＞ Hakoniwa Editorへ ＜＜</a>
+    <h2>目次</h2>
+    <a href="#Overview">・概要</a>
+    <br>
+    <a href="#Environment">・推奨環境</a>
+    <br>
+    <a href="#How_to">・操作方法</a>
+    <br>
+    <a href="#Value">・値について</a>
+    <br>
+    <a href="#Terrains">・現在の使用可能地形一覧</a>
+    <br>
+    <a href="#Change_log">・チェンジログ</a>
+    <h2 id="Overview">概要</h2>
+    <ul>
+        <li>箱庭を自由に作れる、マイクラで言うクリエイティブモードのような物。</li>
+        <li>サーバーが無い為、セーブはパスワード制。</li>
+        <li>地形は随時追加。</li>
+        <li>開発中のため、致命的な問題を孕んでいる可能性あり。</li>
+    </ul>
+    <h2 id="Environment">推奨環境</h2>
+    ・機種
+    <br>　PC
+    <br>　スマホは対応しているが、現状、使いにくい為、非推奨。
+    <br>　WiiUはJSを読み込めてないっぽいので未対応。
+    <br>
+    <br>・ブラウザ
+    <br>　chrome, iron 等の chromium を推奨。
+    <br>　その他のブラウザは未検証の為、非推奨。
+    <br>　最近のバージョンの使用を推奨。
+    <br>　javascriptを有効にすること。
+    <h2 id="How_to">操作方法/各ボタンの詳細</h2>
+    ・地形を描く方法
+    <br>地形、値、ペンの太さを設定してマップを左クリックまたはタップ。
+    <br>ドラッグすると一気に描ける。
+    <br>スマホ等でも可能。
+    <br>
+    <br>・グリッドをon/offにする
+    <br>グリッドをonにすると、マスが目立つようになる。
+    <br>画像変換の際はグリッドも一緒に変換される。
+    <br>
+    <br>・マスをsquare/hexにする
+    <br>squareにするとマスが綺麗に並ぶ。
+    <br>hexにするとマスが箱庭と同じ並びになる。
+    <br>
+    <br>・前/次の操作へ
+    <br>操作のやり直しが行える。
+    <br>地形を描くと"次の操作へ"がリセットされる。
+    <br>ドラッグ等はドラッグを終えるまでが１操作として扱われる。
+    <br>
+    <br>・マップを画像に変換
+    <br>現在の状態を画像に変換できる。
+    <br>ポップアップを許可しないと利用不可。
+    <br>(ブラウザの仕様上、DataURLに直接ジャンプ出来ない為。)
+    <br>
+    <br>・パスワードの生成
+    <br>現在の状態を文字列として表示する。
+    <br>クリップボードにコピーボタンを押すことで自動的にコピーされる。
+    <br>
+    <br>・パスワードから復元
+    <br>文字列からマップデータを復元する。
+    <br>空白文字は自動的に詰められる。
+    <br>破損していると読み込めない。
+    <br>もし間違えて復元してしまったら"前の操作へ"ボタンで戻せる。
+    <h2 id="Value">値について</h2>
+    地形の規模等の値に比例して大きくなる物の他、種類を設定する物もある。
+    <br>以下は種類の表。なお、プレビューで確認可能。
+    <br>
+    <br> ・大学
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>大学の種類</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>農業大学</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>工業大学</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>総合大学</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>軍事大学</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>気象大学</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>生物大学（いのら）</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>気象大学（テトラ）</td>
+        </tr>
+    </table>
+    <br> ・牧場
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>牧場の種類</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>牧場</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>養鶏場</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>養豚場</td>
+        </tr>
+    </table>
+    <br> ・船
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>船の種類</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>小型漁船</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>中型漁船</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>大型漁船</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>帆船</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>海底探査船</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>高速漁船</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>豪華客船TITANICK</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>戦艦RENAS</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>戦艦ERADICATE</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>漁船MASTER</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>戦艦ERADICATE・改</td>
+        </tr>
+    </table>
+    <br> ・怪獣
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>怪獣の種類</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>メカいのら</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>いのら</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>サンジラ（柔）</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>サンジラ（硬）</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>いのらゴースト</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>キングいのら</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>王蟲</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>めたはむ</td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>バリモア</td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>奇獣スライム</td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>はねはむ</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>天使ミカエル</td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>スライムレジェンド（柔）</td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>スライムレジェンド（硬）</td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>f02</td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>天使ウリエル</td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>魔術師アールヴ</td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>堕天使イセリア</td>
+        </tr>
+        <tr>
+            <td>19</td>
+            <td>魔王サタン</td>
+        </tr>
+        <tr>
+            <td>20</td>
+            <td>アイススコーピオン</td>
+        </tr>
+        <tr>
+            <td>21</td>
+            <td>マスコットいのら</td>
+        </tr>
+        <tr>
+            <td>22</td>
+            <td>テトラ</td>
+        </tr>
+        <tr>
+            <td>23</td>
+            <td>超神獣テトラ</td>
+        </tr>
+    </table>
+    <br> ・怪獣の置物
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>怪獣の種類</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>いのら</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>王蟲</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>天使ミカエル</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>f02</td>
+        </tr>
+    </table>
+    <br> ・地石、闇石
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>地石の色</th>
+        </tr>
+        <tr>
+            <td>1,7</td>
+            <td>青</td>
+        </tr>
+        <tr>
+            <td>2,8</td>
+            <td>緑</td>
+        </tr>
+        <tr>
+            <td>3,9</td>
+            <td>赤紫</td>
+        </tr>
+        <tr>
+            <td>4,10</td>
+            <td>銀</td>
+        </tr>
+        <tr>
+            <td>5,11</td>
+            <td>オレンジ</td>
+        </tr>
+        <tr>
+            <td>6,12</td>
+            <td>黒(闇)</td>
+        </tr>
+    </table>
+    <h2 id="Terrains">現在の使用可能地形一覧</h2>
+    <ol id="terrain-list-id"></ol>
+    <h2 id="Change_log">チェンジログ</h2>
+
+    <font size="4">・ver 0.0.1</font>
+    <br>公開。
+
+    
+    <br>　
+    <script src="cfg.js" type="text/javascript"></script>
+    <script src="data.js" type="text/javascript"></script>
+    <script src="manual.js" type="text/javascript"></script>
+</body>
+
+</html>

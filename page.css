@@ -1,0 +1,66 @@
+body {
+    background-color: rgb(149, 208, 248);
+    --width-pos: 640px;
+}
+
+.map-area-calss {
+    position: absolute;
+    width: calc(var(--width-pos) + 0px);
+    top: 2px;
+    left: 2px;
+    line-height: 0;
+}
+
+.child-div-class{
+    width: calc(var(--width-pos) + 0px);
+}
+
+.toolbox-area-class {
+    position: absolute;
+    top: 0px;
+    left: calc(var(--width-pos) + 20px);
+    background-color: rgb(97, 255, 181);
+    width: 310px;
+    height: 690px;
+}
+
+.val_select_class {
+    position: absolute;
+    top: 140px;
+}
+
+.main-pen-class {
+    position: absolute;
+    top: 180px;
+    left: 0px;
+}
+
+.sub-pen-class {
+    display:none;
+}
+
+.preview-class {
+    position: absolute;
+    top: 230px;
+}
+
+.maptoimage-class {
+    position: absolute;
+    top: 380px;
+}
+
+.save-area-class {
+    position: absolute;
+    top: 420px;
+    left: 0px;
+}
+
+.manual-class {
+    position: absolute;
+    top: 615px;
+}
+
+.credit-class {
+    position: absolute;
+    top: 645px;
+}

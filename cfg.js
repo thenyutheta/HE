@@ -8,6 +8,4 @@ const back_max = 15;
 const default_mode = [false,true];//grid,hex
 const grid_style = '1px solid gray';
 
-const cookie_split = 20;
-
 const imgstr = '=';

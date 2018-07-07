@@ -214,7 +214,7 @@
         } else {
             var hexline = pen_size;
             var xcount = 1;
-            var flag_down = 0;
+            var flag_up = true;
             var hex_type;
             if (this.id.split(' - ')[1] % 2 !== 0) {
                 hex_type = 1;
@@ -232,7 +232,7 @@
                     }
                 }
                 if (draw_num + 1 > hexline) {
-                    if (hexline < pen_size * 2 - 1 && flag_down === 0) {
+                    if (hexline < pen_size * 2 - 1 && flag_up) {
                         hexline += 1;
                         imgx = (parseInt(this.id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
                         xcount += 1;
@@ -240,7 +240,7 @@
                             xcount = pen_size - 2;
                         }
                     } else {
-                        flag_down = 1;
+                        flag_up = false;
                         hexline -= 1;
                         imgx = (parseInt(this.id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
                         xcount -= 1;
@@ -249,7 +249,7 @@
                     imgy += 1;
                 } else {
                     draw_num += 1;
-                    imgx += 1
+                    imgx += 1;
                 }
             }
 
@@ -294,10 +294,10 @@
     }
     function allhex_f(size_num) {
         var result = 1;
-        var n = 6
+        var n = 6;
         for (var i = 1; i < size_num; i++) {
             result += n;
-            n += 6
+            n += 6;
         }
         return result;
     }

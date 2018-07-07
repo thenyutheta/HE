@@ -59,7 +59,7 @@
     });
     $('#maptoimage-id').on(eventType, () => {
         html2canvas(mapdiv).then(canvas => {
-            window.open('about:blank').document.write('<img src=' + canvas.toDataURL() + '/>');
+            window.open('about:blank').document.write("<img src='" + canvas.toDataURL() + "'/>");
         });
     });
     $('#del_image-id').on(eventType, () => {

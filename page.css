@@ -20,8 +20,8 @@ body {
     top: 0px;
     left: calc(var(--width-pos) + 20px);
     background-color: rgb(97, 255, 181);
-    width: 310px;
-    height: 690px;
+    width: 320px;
+    height: 700px;
 }
 
 .val_select_class {
@@ -31,8 +31,8 @@ body {
 
 .main-pen-class {
     position: absolute;
-    top: 180px;
-    left: 0px;
+    top: 140px;
+    left: 90px;
 }
 
 .sub-pen-class {
@@ -41,17 +41,27 @@ body {
 
 .preview-class {
     position: absolute;
-    top: 230px;
+    top: 180px;
+}
+
+.syringe-class {
+    position: absolute;
+    top: 225px;
+}
+
+.select-mass-class {
+    position: absolute;
+    top: 260px;
 }
 
 .maptoimage-class {
     position: absolute;
-    top: 380px;
+    top: 355px;
 }
 
 .save-area-class {
     position: absolute;
-    top: 420px;
+    top: 410px;
     left: 0px;
 }
 

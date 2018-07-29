@@ -7,10 +7,18 @@
     const valid = document.getElementById('terrain_val_select');
     const save_area = document.getElementById('save-area-id');
     const preview = document.getElementById('preview-id');
+    const syringe_btn = document.getElementById('syringe-btn-id');
+    const copy_btn = document.getElementById('select-copy-btn');
+    const move_btn = document.getElementById('select-move-btn');
+    const select_btn = document.getElementById('select-mass-btn');
 
     var flag_grid = true;
     var flag_hex = true;
     var flag_drag = false;
+    var flag_select = true;
+    var flag_syringe = true;
+    var flag_copy = true;
+    var flag_move = true;
     var judge = true;
 
     var check_hex = 0;
@@ -27,6 +35,7 @@
     var edit_back = [];
     var edit_next = [];
     var pass_back = '';
+    var select_id = [];
 
     var isTouchDevice = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
     var eventType = (isTouchDevice) ? 'touchend' : 'click';
@@ -38,11 +47,21 @@
 
     preview.width = imgsize;
     preview.height = imgsize;
-
+    /*
+    preview.onclick = () => {
+        if (confirm('開発中の機能を有効にしますか？動作が不安定になる可能性があります。。。')) {
+            document.getElementById('beta-id').style = '';
+        }
+    }
+    */
     $('#' + gridcfg.id).on(eventType, grid_f);
     $('#' + hexcfg.id).on(eventType, hex_f);
     $('#' + terrainid.id).on(eventType, drawpreview);
     $('#' + valid.id).on(eventType, drawpreview);
+    $('#' + syringe_btn.id).on(eventType, syringe_fun);
+    $('#' + copy_btn.id).on(eventType, select_copy_fun);
+    $('#' + move_btn.id).on(eventType, select_move_fun);
+    $('#' + select_btn.id).on(eventType, sel_mass_fun);
     $('#back-id').on(eventType, edit_back_fun);
     $('#next-id').on(eventType, edit_next_fun);
     $('#save-btn-id').on(eventType, save_fun);
@@ -119,6 +138,15 @@
     }
     if (default_mode[0]) { grid_f(); }
     if (default_mode[1]) { hex_f(); }
+
+    const u_a = navigator.userAgent.toUpperCase();
+    if(!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))){
+        if(!confirm('未対応端末のようです。続行しますか？正常に動作しない可能性があります。')){
+           document.body.innerHTML = '<h1>読み込みをキャンセルしました。</h1>';
+        }
+    }
+
+    document.onselectstart = () => { return false; };
     document.ondragstart = () => { flag_drag = true; return false; };
     document.ontouchstart = () => { flag_drag = true; return false; };
     document.onmousemove = (e) => {
@@ -252,7 +280,6 @@
                     imgx += 1;
                 }
             }
-
         }
         var img_back_clone = $.extend(true, [], img_back);
         if (img_back_clone.length !== 0) {
@@ -303,6 +330,10 @@
     }
 
     function hex_f() {
+        if (!flag_select || !flag_syringe) {
+            alert('選択を確定してください。')
+            return;
+        }
         if (flag_hex) {
             hexcfg.textContent = 'マスをsquareにする';
             hex_wid = imgsize / 2;
@@ -340,6 +371,10 @@
     }
 
     function grid_f() {
+        if (!flag_select || !flag_syringe) {
+            alert('選択を確定してください。')
+            return;
+        }
         imgx = 0;
         imgy = 1;
         for (var imgedit = 0; imgedit < line * line; imgedit++) {
@@ -353,19 +388,307 @@
                 divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
                 imgid.style.border = grid_style;
                 gridcfg.textContent = 'グリッドをoffにする';
-                if (check_hex == 1) {
+                if (check_hex === 1) {
                     document.getElementById('hex-' + imgy).style.border = grid_style;
                 }
             } else {
                 divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
                 imgid.style.border = 'none';
                 gridcfg.textContent = 'グリッドをonにする';
-                if (check_hex == 1) {
+                if (check_hex === 1) {
                     document.getElementById('hex-' + imgy).style.border = 'none';
                 }
             }
         }
         flag_grid = !flag_grid;
+    }
+    var flag_grid_back = false;
+    function sel_mass_fun() {
+        if (!flag_syringe || !flag_copy || !flag_move) {
+            alert('選択を確定してください。')
+            return;
+        }
+        if (flag_select) {
+            select_id.length = 0;
+            if (!flag_grid) {
+                flag_grid_back = true;
+            } else {
+                flag_grid_back = false;
+            }
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                var imgid = document.getElementById(imgx + ' - ' + imgy);
+                divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
+                imgid.style.border = select_style[0];
+                if (check_hex === 1) {
+                    document.getElementById('hex-' + imgy).style.border = grid_style;
+                }
+                imgid.onclick = get_select_f;
+            }
+            select_btn.textContent = '選択を確定';
+        } else {
+            select_id.push(check_hex);
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                var imgid = document.getElementById(imgx + ' - ' + imgy);
+                if (!flag_grid_back) {
+                    divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
+                    imgid.style.border = 'none';
+                    if (check_hex === 1) {
+                        document.getElementById('hex-' + imgy).style.border = 'none';
+                    }
+                } else {
+                    imgid.style.border = grid_style;
+                    if (check_hex === 1) {
+                        document.getElementById('hex-' + imgy).style.border = grid_style;
+                    }
+                }
+                imgid.onclick = edit_f;
+            }
+            select_btn.textContent = 'マスを選択';
+        }
+        flag_select = !flag_select;
+    }
+    function get_select_f() {
+        try {
+            if (new RegExp(img_mess, 'g').test(document.getElementById(this.id).title)) {
+                if (select_id.length === 0) {
+                    select_id.push(this.id + '/=/' + document.getElementById(this.id).src);
+                    document.getElementById(this.id).style.border = select_style[2];
+                } else if (select_id.indexOf(this.id + '/=/' + document.getElementById(this.id).src) === - 1) {
+                    select_id.push(this.id + '/=/' + document.getElementById(this.id).src);
+                    document.getElementById(this.id).style.border = select_style[1];
+                } else {
+                    select_id.splice(select_id.indexOf(this.id + '/=/' + document.getElementById(this.id).src), 1);
+                    document.getElementById(this.id).style.border = select_style[0];
+                    document.getElementById(select_id[0].split('/=/')[0]).style.border = select_style[2];
+                }
+            }
+        }
+        catch (e) {
+        }
+    }
+    function syringe_fun() {
+        if (!flag_select || !flag_copy || !flag_move) {
+            alert('選択を確定してください。')
+            return;
+        }
+        if (flag_syringe) {
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                document.getElementById(imgx + ' - ' + imgy).onclick = syringe_get_fun;
+            }
+            syringe_btn.textContent = '取得したい地形を選択or[キャンセル]';
+            flag_syringe = false;
+        } else {
+            syringe_b_def();
+        }
+    }
+    function syringe_get_fun() {
+        try {
+            if (new RegExp(img_mess, 'g').test(document.getElementById(this.id).title)) {
+                var getimgs = document.getElementById(this.id).src;
+                getimgs = getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0];
+                if ((/@\d+/).test(getimgs)) {
+                    valid.value = getimgs.match(/@\d+/g)[0].substr(1);
+                }
+                getimgs = getimgs.replace(/@\d+/g, '#N#');
+                terrainid.value = getimgs + '/' + terrain_data.findIndex(function (element, index, array) { return element.indexOf(getimgs) >= 0; });
+                drawpreview();
+                syringe_b_def();
+            }
+        }
+        catch (e) {
+        }
+    }
+    function syringe_b_def() {
+        imgx = 0;
+        imgy = 1;
+        for (var imgedit = 0; imgedit < line * line; imgedit++) {
+            imgx += 1;
+            if (imgedit && imgedit % line === 0) {
+                imgy += 1;
+                imgx = 1;
+            }
+            document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
+        }
+        syringe_btn.textContent = 'スポイトを使う';
+        flag_syringe = true;
+    }
+    function select_copy_fun() {
+        if (!flag_select || !flag_syringe || !flag_move) {
+            alert('選択を確定してください。')
+            return;
+        }
+        if (select_id.length === 0) {
+            alert('選択されていません。')
+            return;
+        }
+        if (flag_copy) {
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                document.getElementById(imgx + ' - ' + imgy).onclick = try_copy_fun;
+            }
+            copy_btn.textContent = 'コピー先の基準点を選択or[終了]';
+            flag_copy = false;
+        } else {
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
+            }
+            copy_btn.textContent = '選択された地形をコピー';
+            flag_copy = true;
+        }
+    }
+    function try_copy_fun() {
+        img_back.length = 0;
+        draw_object_f(this.id);
+    }
+    function draw_object_f(id) {
+        var x_diff = parseInt(id.split(' - ')[0]) - parseInt(select_id[0].split('/=/')[0].split(' - ')[0]);
+        var y_diff = parseInt(id.split(' - ')[1]) - parseInt(select_id[0].split('/=/')[0].split(' - ')[1]);
+        if (select_id[select_id.length - 1] === 0) {
+            for (var arr of select_id) {
+                if (arr === 0 || arr === 1) {
+                    break;
+                }
+                imgx = parseInt(arr.split('/=/')[0].split(' - ')[0]) + x_diff;
+                imgy = parseInt(arr.split('/=/')[0].split(' - ')[1]) + y_diff;
+                var copysrc = arr.split('/=/')[1];
+                try {
+                    if (document.getElementById(imgx + ' - ' + imgy).src !== copysrc) {
+                        img_back.push([imgx + ' - ' + imgy, document.getElementById(imgx + ' - ' + imgy).src, copysrc]);
+                        document.getElementById(imgx + ' - ' + imgy).src = copysrc;
+                    }
+                } catch (e) {
+                }
+            }
+        } else {
+            var hexpattern = 0;
+            imgy = parseInt(select_id[0].split('/=/')[0].split(' - ')[1]);
+            if (imgy % 2 === 0 && (imgy + y_diff) % 2 === 1) {
+                hexpattern = 1;
+            } else if (imgy % 2 === 1 && (imgy + y_diff) % 2 === 0) {
+                hexpattern = 2;
+            }
+            for (var arr of select_id) {
+                if (arr === 0 || arr === 1) {
+                    break;
+                }
+                imgx = parseInt(arr.split('/=/')[0].split(' - ')[0]) + x_diff;
+                imgy = parseInt(arr.split('/=/')[0].split(' - ')[1]) + y_diff;
+                //hex補正
+                if (hexpattern === 1 && imgy % 2 === 0) {
+                    imgx += 1;
+                } else if (hexpattern === 2 && imgy % 2 === 1) {
+                    imgx -= 1;
+                }
+                var copysrc = arr.split('/=/')[1];
+                try {
+                    if (document.getElementById(imgx + ' - ' + imgy).src !== copysrc) {
+                        img_back.push([imgx + ' - ' + imgy, document.getElementById(imgx + ' - ' + imgy).src, copysrc]);
+                        document.getElementById(imgx + ' - ' + imgy).src = copysrc;
+                    }
+                }
+                catch (e) {
+                }
+            }
+        }
+        var img_back_clone = $.extend(true, [], img_back);
+        if (img_back_clone.length !== 0) {
+            pass_back = '';
+            edit_back.push(img_back_clone);
+            edit_next.length = 0;
+        }
+        if (edit_back.length > back_max) {
+            edit_back.shift();
+        }
+    }
+
+    function select_move_fun() {
+        if (!flag_select || !flag_syringe || !flag_copy) {
+            alert('選択を確定してください。')
+            return;
+        }
+        if (select_id.length === 0) {
+            alert('選択されていません。')
+            return;
+        }
+        if (flag_move) {
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                document.getElementById(imgx + ' - ' + imgy).onclick = try_move_fun;
+            }
+            move_btn.textContent = '移動先の基準点を選択or[終了]';
+            flag_move = false;
+        } else {
+            imgx = 0;
+            imgy = 1;
+            for (var imgedit = 0; imgedit < line * line; imgedit++) {
+                imgx += 1;
+                if (imgedit && imgedit % line === 0) {
+                    imgy += 1;
+                    imgx = 1;
+                }
+                document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
+            }
+            move_btn.textContent = '選択された地形を移動';
+            flag_move = true;
+        }
+    }
+    function try_move_fun() {
+        img_back.length = 0;
+        getuser_select();
+        for (var arr of select_id) {
+            if (arr === 0 || arr === 1) {
+                break;
+            }
+            var imgid = arr.split('/=/')[0];
+            var getimgs = arr.split('/=/')[1];
+            getimgs = (getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0]);
+            if (getimgs !== user_select) {
+                img_back.push([imgid, document.getElementById(imgid).src, imgp + user_select + '.png']);
+                document.getElementById(imgid).src = imgp + user_select + '.png';
+            }
+        }
+        draw_object_f(this.id);
+        select_move_fun();
     }
 
     function edit_back_fun() {
@@ -454,7 +777,7 @@
             password = password.replace(savereg, prsdaAr[0]);
         }
         if (password.length !== line * line + 1) {
-            alert("データが破損しています。。。 : " + password.length);
+            alert('データが破損しています。。。 : ' + password.length);
             return;
         }
         password = password.replace(/(.)(?=.)/g, '$1,').split(',');

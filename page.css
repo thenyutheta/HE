@@ -72,5 +72,6 @@ body {
 
 .credit-class {
     position: absolute;
-    top: 645px;
+    top: 650px;
+    font-size: 12px;
 }

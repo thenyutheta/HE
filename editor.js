@@ -78,7 +78,7 @@
     });
     $('#maptoimage-id').on(eventType, () => {
         html2canvas(mapdiv).then(canvas => {
-            window.open('about:blank').document.write("<img src='" + canvas.toDataURL() + "'/>");
+            window.open('about:blank').document.write("<h2>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h2>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
     $('#save-cookie-id').on(eventType, () => {
@@ -731,6 +731,7 @@
         var sv_arr = [];
         var i = 0;
         for (var savearr of save_data) {
+            sv_arr[i] = terrain_data[0][2];
             for (var imgdaAr of terrain_data) {
                 if (savearr.search(/@\d+/) > - 1) {
                     if (savearr.replace(/@\d+/g, '#N#') === imgdaAr[0]) {
@@ -776,8 +777,12 @@
             var savereg = new RegExp(prsdaAr[1], 'g');
             password = password.replace(savereg, prsdaAr[0]);
         }
+        if (password.indexOf('<') === -1 && password.indexOf('>') === -1) {
+            alert('データが破損しています。 Error : マスタイプを識別する文字が含まれていません。');
+            return;
+        }
         if (password.length !== line * line + 1) {
-            alert('データが破損しています。。。 : ' + password.length);
+            alert('データが破損しています。 Error : データの長さが間違っています。 (' + password.length + ')');
             return;
         }
         password = password.replace(/(.)(?=.)/g, '$1,').split(',');

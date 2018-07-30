@@ -78,7 +78,7 @@
     });
     $('#maptoimage-id').on(eventType, () => {
         html2canvas(mapdiv).then(canvas => {
-            window.open('about:blank').document.write("<h2>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h2>" + "<img src='" + canvas.toDataURL() + "'/>");
+            window.open('about:blank').document.write("<h3>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h3>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
     $('#save-cookie-id').on(eventType, () => {
@@ -99,7 +99,7 @@
         creopti.value = imgdaAr[0] + '/' + i;
         creopti.textContent = imgdaAr[1];
         terrainid.appendChild(creopti);
-        i += 1;
+        i++;
     }
 
     for (var i = 1; i <= 99; i++) {
@@ -116,9 +116,9 @@
     child_div.className = 'child-div-class';
     mapdiv.appendChild(child_div);
     for (var imgedit = 0; imgedit < line * line; imgedit++) {
-        imgx += 1;
+        imgx++;
         if (imgedit && imgedit % line === 0) {
-            imgy += 1;
+            imgy++;
             imgx = 1;
             var child_div = document.createElement('div');
             child_div.id = 'line-' + imgy;
@@ -233,10 +233,10 @@
                 if (draw_num + 1 > pen_size) {
                     draw_num = 1;
                     imgx -= (pen_size - 1);
-                    imgy += 1;
+                    imgy++;
                 } else {
-                    draw_num += 1;
-                    imgx += 1;
+                    draw_num++;
+                    imgx++;
                 }
             }
         } else {
@@ -261,9 +261,9 @@
                 }
                 if (draw_num + 1 > hexline) {
                     if (hexline < pen_size * 2 - 1 && flag_up) {
-                        hexline += 1;
+                        hexline++;
                         imgx = (parseInt(this.id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
-                        xcount += 1;
+                        xcount++;
                         if (xcount === pen_size) {
                             xcount = pen_size - 2;
                         }
@@ -274,10 +274,10 @@
                         xcount -= 1;
                     }
                     draw_num = 1;
-                    imgy += 1;
+                    imgy++;
                 } else {
-                    draw_num += 1;
-                    imgx += 1;
+                    draw_num++;
+                    imgx++;
                 }
             }
         }
@@ -378,9 +378,9 @@
         imgx = 0;
         imgy = 1;
         for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx += 1;
+            imgx++;
             if (imgedit && imgedit % line === 0) {
-                imgy += 1;
+                imgy++;
                 imgx = 1;
             }
             var imgid = document.getElementById(imgx + ' - ' + imgy);
@@ -418,9 +418,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 var imgid = document.getElementById(imgx + ' - ' + imgy);
@@ -437,9 +437,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 var imgid = document.getElementById(imgx + ' - ' + imgy);
@@ -489,9 +489,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 document.getElementById(imgx + ' - ' + imgy).onclick = syringe_get_fun;
@@ -523,9 +523,9 @@
         imgx = 0;
         imgy = 1;
         for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx += 1;
+            imgx++;
             if (imgedit && imgedit % line === 0) {
-                imgy += 1;
+                imgy++;
                 imgx = 1;
             }
             document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
@@ -546,9 +546,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 document.getElementById(imgx + ' - ' + imgy).onclick = try_copy_fun;
@@ -559,9 +559,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
@@ -609,7 +609,7 @@
                 imgy = parseInt(arr.split('/=/')[0].split(' - ')[1]) + y_diff;
                 //hex補正
                 if (hexpattern === 1 && imgy % 2 === 0) {
-                    imgx += 1;
+                    imgx++;
                 } else if (hexpattern === 2 && imgy % 2 === 1) {
                     imgx -= 1;
                 }
@@ -648,9 +648,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 document.getElementById(imgx + ' - ' + imgy).onclick = try_move_fun;
@@ -661,9 +661,9 @@
             imgx = 0;
             imgy = 1;
             for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx += 1;
+                imgx++;
                 if (imgedit && imgedit % line === 0) {
-                    imgy += 1;
+                    imgy++;
                     imgx = 1;
                 }
                 document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
@@ -718,9 +718,9 @@
         var save_data = "";
         var password = "";
         for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx += 1;
+            imgx++;
             if (imgedit && imgedit % line === 0) {
-                imgy += 1;
+                imgy++;
                 imgx = 1;
             }
             var getimgs = document.getElementById(imgx + ' - ' + imgy).src;
@@ -747,7 +747,7 @@
                     }
                 }
             }
-            i += 1;
+            i++;
         }
         for (var ar of sv_arr) {
             password += ar;
@@ -809,15 +809,15 @@
                     }
                 }
             }
-            i += 1;
+            i++;
         }
         imgx = 0;
         imgy = 1;
         img_back.length = 0;
         for (var i = 0; i < line * line; i++) {
-            imgx += 1;
+            imgx++;
             if (i && i % line === 0) {
-                imgy += 1;
+                imgy++;
                 imgx = 1;
             }
             img_back.push([(imgx + ' - ' + imgy), document.getElementById(imgx + ' - ' + imgy).src, imgp + save_data[i] + '.png']);

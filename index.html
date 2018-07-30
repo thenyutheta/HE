@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="page.css">
     <link rel="icon" href="./images/sys/editor_favicon.png" type="images/png">
-    <title>Hakoniwa Editor ver 0.1.1</title>
+    <title>Hakoniwa Editor ver 0.1.2</title>
 </head>
 
 <body>
@@ -67,17 +67,17 @@
         <div class="save-area-class">
             <input type="text" id="save-area-id">
             <br>
-            <button id="save-btn-id">　　　　パスワードを生成　　　　　</button>
+            <button id="save-btn-id" style="font-size: 11px">　パスワードを生成　　</button>
+            　
+            <button id="load-btn-id" style="font-size: 11px">　パスワードから復元　　</button>
             <br>
-            <button id="load-btn-id">　　　　パスワードから復元　　　　</button>
+            <button id="save-cookie-id" style="font-size: 10px">パスワードをCookieに保存</button>
+            　
+            <button id="load-cookie-id" style="font-size: 10px">パスワードをCookieから復元</button>
             <br>
-            <button id="save-cookie-id">　　　パスワードをCookieに保存　　</button>
-            <br>
-            <button id="load-cookie-id"> 　　パスワードをCookieから復元　　</button>
-            <br>
-            <button id="copy-save-id">パスワードをクリップボードにコピー</button>
-            <br>
-            <button id="clear-text-id">　　　テキストボックスをクリア　　</button>
+            <button id="copy-save-id" style="font-size: 11px">パスワードをコピーする</button>
+            　
+            <button id="clear-text-id" style="font-size: 11px">テキストボックスをクリア</button>
         </div>
         <button class="syringe-class" id="syringe-btn-id">スポイトを使う</button>
         <div class="select-mass-class">
@@ -86,19 +86,22 @@
             <button id="select-copy-btn">選択された地形をコピー</button>
             <br>
             <button id="select-move-btn">選択された地形を移動</button>
+            <!--
+            <br>
+            <button id="select-fill-btn">選択された地形を塗りつぶす</button>
+            -->
         </div>
         <div id="beta-id" style="display:none;">
 
         </div>
 
         <a href="./manual.html" target="_blank" class="manual-class">マニュアル</a>
-        <div class="maptoimage-class">
-            <button id="maptoimage-id">マップを画像に変換(ポップアップ)</button>
-        </div>
+        <button id="maptoimage-id" class="maptoimage-class">マップを画像に変換(ポップアップ)</button>
         <div class="credit-class">
             使用画像:
             <a href="http://www5b.biglobe.ne.jp/~k-e-i/" target="_blank">Hakoniwa R.A.(跡地)</a> &
             <a href="http://hakoniwa.symphonic-net.com/" target="_blank">箱庭諸島S.E(跡地)</a>
+            <br>　　　　　<a href="http://81.la/~uhyo/" target="_blank">箱庭諸島 GS</a>
             <br>スクリプト:theta
         </div>
     </div>

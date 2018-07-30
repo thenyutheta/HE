@@ -46,32 +46,34 @@ body {
 
 .syringe-class {
     position: absolute;
-    top: 225px;
+    top: 220px;
+    font-size: 12px;
 }
 
 .select-mass-class {
     position: absolute;
-    top: 260px;
+    top: 255px;
 }
 
 .maptoimage-class {
     position: absolute;
-    top: 355px;
+    font-size: 12px;
+    top: 440px;
 }
 
 .save-area-class {
     position: absolute;
-    top: 410px;
+    top: 485px;
     left: 0px;
 }
 
 .manual-class {
     position: absolute;
-    top: 615px;
+    top: 610px;
 }
 
 .credit-class {
     position: absolute;
     top: 650px;
-    font-size: 12px;
+    font-size: 11px;
 }

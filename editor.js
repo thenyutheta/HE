@@ -11,21 +11,18 @@
     const copy_btn = document.getElementById('select-copy-btn');
     const move_btn = document.getElementById('select-move-btn');
     const select_btn = document.getElementById('select-mass-btn');
-    const command_x = document.getElementById('command-x-id');
-    const command_y = document.getElementById('command-y-id');
-    const cvs_chg_btn = document.getElementById('cvs-change-btn');
     const sn_btn = document.getElementById('SN-btn-id');
 
     var flag_drag = false;
+    var flag_smart = false;
     var flag_grid = true;
     var flag_hex = true;
     var flag_sn = true;
     var flag_select = true;
     var flag_syringe = true;
-    var flag_cvs_chg = true;
+    var flag_scr = true
     var flag_copy = true;
     var flag_move = true;
-    var flag_canvas = true;
     var judge = true;
 
     var check_hex = 0;
@@ -47,6 +44,20 @@
 
     var isTouchDevice = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
     var eventType = (isTouchDevice) ? 'touchend' : 'click';
+
+    if( window.navigator.userAgent.toLowerCase().indexOf('chrome') != -1 ){
+        var bodyStyle, p2rfixStyle;
+    
+        document.getElementsByTagName('html')[0].style.height='100%';
+    
+        bodyStyle = document.getElementsByTagName('body')[0].style; 
+        bodyStyle.height = '100%';
+        bodyStyle.overflowY = 'hidden';
+    
+        p2rfixStyle = document.getElementById('p2rfix').style;
+        p2rfixStyle.height = '100%';
+        p2rfixStyle.overflow = 'auto';
+    }
 
     const divcsswid = document.querySelector('body');
     divcsswid.style.setProperty('--width-pos', imgsize * line + 'px');
@@ -71,7 +82,6 @@
     $('#' + copy_btn.id).on(eventType, select_copy_fun);
     $('#' + move_btn.id).on(eventType, select_move_fun);
     $('#' + select_btn.id).on(eventType, sel_mass_fun);
-    $('#' + cvs_chg_btn.id).on(eventType, cvs_chg_fun);
     $('#' + sn_btn.id).on(eventType, sn_fun);
     $('#back-id').on(eventType, edit_back_fun);
     $('#next-id').on(eventType, edit_next_fun);
@@ -105,18 +115,6 @@
             save_area.value = Cookies.get('password');
         }
     });
-    $('#command-xy-btn-id').on(eventType, () => {
-        var temp = parseInt(command_y.value) + 1;
-        var f_backup = true;
-        if (!flag_canvas) {
-            f_backup = false;
-            flag_canvas = true;
-        }
-        document.getElementById(parseInt(command_x.value) + 1 + ' - ' + temp).onclick();
-        if (!f_backup) {
-            flag_canvas = false;
-        }
-    });
 
     var i = 0;
     for (var imgdaAr of terrain_data) {
@@ -128,8 +126,6 @@
     }
 
     set_values(valid, 1, 99);
-    set_values(command_x, 0, line - 1);
-    set_values(command_y, 0, line - 1);
     function set_values(elm, min, max) {
         for (var i = min; i <= max; i++) {
             var creopti = document.createElement('option');
@@ -188,19 +184,10 @@
 
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
-        alert('スクロールしやすいように一時的にキャンバスを無効にします。\n有効ボタンで有効にできます。');
-        cvs_chg_fun();
-        /*if (confirm('非推奨端末のようです。\nキャンバスを無効(スマートフォンの場合少し使いやすくなります。)にして続行しますか？\nOK＝キャンバス無効化\nキャンセル＝デフォルト')) {
-            
-        }*/
+        flag_smart = true;
     }
 
     function img_clk_sta() {
-        command_x.value = parseInt(this.id.split(' - ')[0]) - 1;
-        command_y.value = parseInt(this.id.split(' - ')[1]) - 1;
-        if (!flag_canvas) {
-            return;
-        }
         switch (clk_mode) {
             case 'edit':
                 edit_f(this.id);
@@ -221,7 +208,7 @@
         }
     }
 
-    $(window).on('beforeunload', function() {
+    $(window).on('beforeunload', function () {
         return '';
     });
 
@@ -234,18 +221,23 @@
             move_f();
         }
     }
-    document.ontouchmove = (e) => {
+ 
+    $(document).on('touchmove', (e) => {
         if (e.changedTouches[0].pageX * e.changedTouches[0].pageY > 0) {
             elm = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
             move_f();
         }
-    }
+    })
     document.ontouchend = move_end;
     document.onmouseup = move_end;
     function move_f() {
         if (flag_drag) {
             try {
                 if (/map-tile/g.test(elm.name)) {
+                    if (flag_smart && flag_scr) {
+                        $('body').css({ 'position': 'fixed', 'left': -1 });
+                    }
+                    flag_scr = false;
                     document.getElementById(elm.id).onclick();
                 }
             }
@@ -270,26 +262,12 @@
             }
         }
         drag_back.length = 0;
+        if (flag_smart) {
+            $('body').css({ 'position': 'absolute', 'left': -1 });
+        }
+        flag_scr = true;
     }
 
-    function cvs_chg_fun() {
-        if (flag_cvs_chg) {
-            cvs_chg_btn.textContent = 'キャンバスを有効にする';
-            var map_tile = document.getElementsByName('map-tile');
-            for (var temp of map_tile) {
-                temp.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess[1];
-            }
-            flag_canvas = false;
-        } else {
-            cvs_chg_btn.textContent = 'キャンバスを無効にする';
-            var map_tile = document.getElementsByName('map-tile');
-            for (var temp of map_tile) {
-                temp.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' )' + img_mess[0];
-            }
-            flag_canvas = true;
-        }
-        flag_cvs_chg = !flag_cvs_chg;
-    }
     function sn_fun() {
         if (flag_sn) {
             sn_btn.textContent = 'Space Numberを無効にする';

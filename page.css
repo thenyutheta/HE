@@ -1,6 +1,7 @@
 body {
     background-color: rgb(149, 208, 248);
     --width-pos: 640px;
+    left: 0px;
 }
 
 .map-area-calss {
@@ -37,32 +38,27 @@ body {
 .main-pen-class {
     position: absolute;
     top: 160px;
-    left: 125px;
+    left: 115px;
 }
 
 .sub-pen-class {
     display:none;
 }
 
-.command-xy-class{
+.preview-class {
     position: absolute;
     top: 195px;
 }
 
-.preview-class {
-    position: absolute;
-    top: 230px;
-}
-
 .syringe-class {
     position: absolute;
-    top: 270px;
+    top: 240px;
     font-size: 12px;
 }
 
 .select-mass-class {
     position: absolute;
-    top: 300px;
+    top: 270px;
 }
 
 .maptoimage-class {

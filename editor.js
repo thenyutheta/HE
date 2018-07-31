@@ -188,9 +188,11 @@
 
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
-        if (confirm('非推奨端末のようです。\nキャンバスを無効(スマートフォンの場合少し使いやすくなります。)にして続行しますか？\nOK＝キャンバス無効化\nキャンセル＝デフォルト')) {
-            cvs_chg_fun();
-        }
+        alert('スクロールしやすいように一時的にキャンバスを無効にします。\n有効ボタンで有効にできます。');
+        cvs_chg_fun();
+        /*if (confirm('非推奨端末のようです。\nキャンバスを無効(スマートフォンの場合少し使いやすくなります。)にして続行しますか？\nOK＝キャンバス無効化\nキャンセル＝デフォルト')) {
+            
+        }*/
     }
 
     function img_clk_sta() {
@@ -238,8 +240,8 @@
             move_f();
         }
     }
-    document.onmouseup = move_end;
     document.ontouchend = move_end;
+    document.onmouseup = move_end;
     function move_f() {
         if (flag_drag) {
             try {

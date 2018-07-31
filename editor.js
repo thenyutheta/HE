@@ -185,6 +185,9 @@
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
         flag_smart = true;
+        var spmess = document.createElement('h3');
+        spmess.textContent = '\nスクロール等は以下の余白を使って下さい。';
+        mapdiv.appendChild(spmess);
     }
 
     function img_clk_sta() {
@@ -235,7 +238,7 @@
             try {
                 if (/map-tile/g.test(elm.name)) {
                     if (flag_smart && flag_scr) {
-                        $('body').css({ 'position': 'fixed', 'left': -1 });
+                        $('body').css({ 'position': 'fixed'});
                     }
                     flag_scr = false;
                     document.getElementById(elm.id).onclick();
@@ -263,7 +266,7 @@
         }
         drag_back.length = 0;
         if (flag_smart) {
-            $('body').css({ 'position': 'absolute', 'left': -1 });
+            $('body').css({ 'position': 'absolute'});
         }
         flag_scr = true;
     }

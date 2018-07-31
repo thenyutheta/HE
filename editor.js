@@ -11,14 +11,21 @@
     const copy_btn = document.getElementById('select-copy-btn');
     const move_btn = document.getElementById('select-move-btn');
     const select_btn = document.getElementById('select-mass-btn');
+    const command_x = document.getElementById('command-x-id');
+    const command_y = document.getElementById('command-y-id');
+    const cvs_chg_btn = document.getElementById('cvs-change-btn');
+    const sn_btn = document.getElementById('SN-btn-id');
 
+    var flag_drag = false;
     var flag_grid = true;
     var flag_hex = true;
-    var flag_drag = false;
+    var flag_sn = true;
     var flag_select = true;
     var flag_syringe = true;
+    var flag_cvs_chg = true;
     var flag_copy = true;
     var flag_move = true;
+    var flag_canvas = true;
     var judge = true;
 
     var check_hex = 0;
@@ -28,6 +35,7 @@
     var imgy;
     var elm;
 
+    var clk_mode;
     var user_select;
     var img_back = [];
     var drag_back = [];
@@ -44,6 +52,7 @@
     divcsswid.style.setProperty('--width-pos', imgsize * line + 'px');
 
     mapdiv.style.width = imgsize * line;
+    mapdiv.oncontextmenu = () => { return false; }
 
     preview.width = imgsize;
     preview.height = imgsize;
@@ -62,6 +71,8 @@
     $('#' + copy_btn.id).on(eventType, select_copy_fun);
     $('#' + move_btn.id).on(eventType, select_move_fun);
     $('#' + select_btn.id).on(eventType, sel_mass_fun);
+    $('#' + cvs_chg_btn.id).on(eventType, cvs_chg_fun);
+    $('#' + sn_btn.id).on(eventType, sn_fun);
     $('#back-id').on(eventType, edit_back_fun);
     $('#next-id').on(eventType, edit_next_fun);
     $('#save-btn-id').on(eventType, save_fun);
@@ -76,9 +87,10 @@
     $('#clear-text-id').on(eventType, () => {
         save_area.value = '';
     });
+
     $('#maptoimage-id').on(eventType, () => {
         html2canvas(mapdiv).then(canvas => {
-            window.open('about:blank').document.write("<h3>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h3>" + "<img src='" + canvas.toDataURL() + "'/>");
+            window.open('about:blank').document.write("<h4>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h4>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
     $('#save-cookie-id').on(eventType, () => {
@@ -92,6 +104,18 @@
             save_area.value = Cookies.get('password');
         }
     });
+    $('#command-xy-btn-id').on(eventType, () => {
+        var temp = parseInt(command_y.value) + 1;
+        var f_backup = true;
+        if (!flag_canvas) {
+            f_backup = false;
+            flag_canvas = true;
+        }
+        document.getElementById(parseInt(command_x.value) + 1 + ' - ' + temp).onclick();
+        if (!f_backup) {
+            flag_canvas = false;
+        }
+    });
 
     var i = 0;
     for (var imgdaAr of terrain_data) {
@@ -102,12 +126,30 @@
         i++;
     }
 
-    for (var i = 1; i <= 99; i++) {
-        var creopti = document.createElement('option');
-        creopti.value = i;
-        creopti.textContent = i;
-        valid.appendChild(creopti);
+    set_values(valid, 1, 99);
+    set_values(command_x, 0, line - 1);
+    set_values(command_y, 0, line - 1);
+    function set_values(elm, min, max) {
+        for (var i = min; i <= max; i++) {
+            var creopti = document.createElement('option');
+            creopti.value = i;
+            creopti.textContent = i;
+            elm.appendChild(creopti);
+        }
     }
+
+    var crediv = document.createElement('div');
+    crediv.id = 'headerdiv';
+    for (var i = 0; i < line * 2; i++) {
+        var creimg = document.createElement('img');
+        creimg.src = imgp + 'sys/space.png';
+        creimg.alt = 'E.';
+        creimg.id = 'header-' + i;
+        creimg.width = imgsize / 2;
+        creimg.height = imgsize;
+        crediv.appendChild(creimg);
+    }
+    mapdiv.appendChild(crediv);
 
     imgx = 0;
     imgy = 1;
@@ -129,20 +171,50 @@
         child_img.src = imgp + terrain_data[1][0] + '.png';
         child_img.alt = 'E.';
         child_img.id = imgx + ' - ' + imgy;
-        child_img.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess;
+        child_img.name = 'map-tile'
+        child_img.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess[0];
         child_img.width = imgsize;
         child_img.height = imgsize;
 
-        child_img.onclick = edit_f;
+        child_img.onclick = img_clk_sta;
         child_div.appendChild(child_img);
     }
+    clk_mode = 'edit';
+
     if (default_mode[0]) { grid_f(); }
     if (default_mode[1]) { hex_f(); }
+    if (default_mode[2]) { sn_fun(); }
 
     const u_a = navigator.userAgent.toUpperCase();
-    if(!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))){
-        if(!confirm('未対応端末のようです。続行しますか？正常に動作しない可能性があります。')){
-           document.body.innerHTML = '<h1>読み込みをキャンセルしました。</h1>';
+    if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
+        if (confirm('未対応端末のようです。キャンバスを無効にして続行しますか？\nOK＝キャンバス無効化　キャンセル＝デフォルト')) {
+            cvs_chg_fun();
+        }
+    }
+
+    function img_clk_sta() {
+        command_x.value = parseInt(this.id.split(' - ')[0]) - 1;
+        command_y.value = parseInt(this.id.split(' - ')[1]) - 1;
+        if (!flag_canvas) {
+            return;
+        }
+        switch (clk_mode) {
+            case 'edit':
+                edit_f(this.id);
+                break;
+            case 'syringe':
+                syringe_get_fun(this.id);
+                break;
+            case 'select':
+                get_select_f(this.id);
+                break;
+            case 'copy':
+                img_back.length = 0;
+                draw_object_f(this.id);
+                break;
+            case 'move':
+                try_move_fun(this.id);
+                break;
         }
     }
 
@@ -166,7 +238,7 @@
     function move_f() {
         if (flag_drag) {
             try {
-                if (new RegExp(img_mess, 'g').test(elm.title)) {
+                if (/map-tile/g.test(elm.name)) {
                     document.getElementById(elm.id).onclick();
                 }
             }
@@ -193,15 +265,67 @@
         drag_back.length = 0;
     }
 
+    function cvs_chg_fun() {
+        if (flag_cvs_chg) {
+            cvs_chg_btn.textContent = 'キャンバスを有効にする';
+            var map_tile = document.getElementsByName('map-tile');
+            for (var temp of map_tile) {
+                temp.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess[1];
+            }
+            flag_canvas = false;
+        } else {
+            cvs_chg_btn.textContent = 'キャンバスを無効にする';
+            var map_tile = document.getElementsByName('map-tile');
+            for (var temp of map_tile) {
+                temp.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' )' + img_mess[0];
+            }
+            flag_canvas = true;
+        }
+        flag_cvs_chg = !flag_cvs_chg;
+    }
+    function sn_fun() {
+        if (flag_sn) {
+            sn_btn.textContent = 'Space Numberを無効にする';
+            for (var i = 1; i <= sn_max; i++) {
+                document.getElementById('hex-' + i).src = imgp + 'sys/space' + (i - 1) + '.png';
+            }
+            var n = 0;
+            for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                if (n >= sn_max) {
+                    break;
+                }
+                if (i % 2 === 1) {
+                    document.getElementById('header-' + i).src = imgp + 'sys/space' + n + '.png';
+                    n++;
+                }
+            }
+        } else {
+            sn_btn.textContent = 'Space Numberを有効にする';
+            for (var i = 1; i <= sn_max; i++) {
+                document.getElementById('hex-' + i).src = imgp + 'sys/space.png';
+            }
+            for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                if (n >= sn_max) {
+                    break;
+                }
+                if (i % 2 === 1) {
+                    document.getElementById('header-' + i).src = imgp + 'sys/space.png';
+                }
+            }
+        }
+        flag_sn = !flag_sn;
+    }
+
     function drawpreview() {
         getuser_select();
         preview.src = imgp + user_select + '.png';
     }
-    function edit_f() {
+
+    function edit_f(id) {
         getuser_select();
         img_back.length = 0;
-        imgx = this.id.split(' - ')[0];
-        imgy = this.id.split(' - ')[1];
+        imgx = id.split(' - ')[0];
+        imgy = id.split(' - ')[1];
         var img_corner;
         var draw_num = 1;
         var pen_size;
@@ -216,8 +340,8 @@
         if (pen_size === 1) {
             imgsrc_judge(imgx + ' - ' + imgy);
             if (judge) {
-                img_back.push([this.id, document.getElementById(this.id).src, imgp + user_select + '.png']);
-                document.getElementById(this.id).src = imgp + user_select + '.png';
+                img_back.push([id, document.getElementById(id).src, imgp + user_select + '.png']);
+                document.getElementById(id).src = imgp + user_select + '.png';
             }
         } else if (check_hex === 0) {
             imgx -= img_corner;
@@ -244,7 +368,7 @@
             var xcount = 1;
             var flag_up = true;
             var hex_type;
-            if (this.id.split(' - ')[1] % 2 !== 0) {
+            if (id.split(' - ')[1] % 2 !== 0) {
                 hex_type = 1;
             } else {
                 hex_type = 0;
@@ -262,7 +386,7 @@
                 if (draw_num + 1 > hexline) {
                     if (hexline < pen_size * 2 - 1 && flag_up) {
                         hexline++;
-                        imgx = (parseInt(this.id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
+                        imgx = (parseInt(id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
                         xcount++;
                         if (xcount === pen_size) {
                             xcount = pen_size - 2;
@@ -270,7 +394,7 @@
                     } else {
                         flag_up = false;
                         hexline -= 1;
-                        imgx = (parseInt(this.id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
+                        imgx = (parseInt(id.split(' - ')[0]) - xcount) - Math.floor((pen_size - hex_type - xcount) / 2);
                         xcount -= 1;
                     }
                     draw_num = 1;
@@ -331,7 +455,7 @@
 
     function hex_f() {
         if (!flag_select || !flag_syringe) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
         if (flag_hex) {
@@ -351,6 +475,14 @@
                     document.getElementById('line-' + i).appendChild(hex_img);
                 }
             }
+            var creimg = document.createElement('img');
+            creimg.src = imgp + 'sys/space.png';
+            creimg.alt = 'E.';
+            creimg.id = 'header-' + line * 2;
+            creimg.width = imgsize / 2;
+            creimg.height = imgsize;
+            document.getElementById('headerdiv').insertBefore(creimg, document.getElementById('header-' + line * 2 - 1));
+
             document.getElementById('hex-pen-id').className = 'main-pen-class';
             document.getElementById('n-pen-id').className = 'sub-pen-class';
             grid_f();
@@ -364,6 +496,7 @@
             for (var i = 1; i <= line; i++) {
                 document.getElementById('hex-' + i).outerHTML = '';
             }
+            document.getElementById('header-' + line * 2).outerHTML = '';
             document.getElementById('hex-pen-id').className = 'sub-pen-class';
             document.getElementById('n-pen-id').className = 'main-pen-class';
         }
@@ -372,40 +505,57 @@
 
     function grid_f() {
         if (!flag_select || !flag_syringe) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
-        imgx = 0;
-        imgy = 1;
-        for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx++;
-            if (imgedit && imgedit % line === 0) {
-                imgy++;
-                imgx = 1;
+        if (flag_grid) {
+            divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
+            var map_tile = document.getElementsByName('map-tile');
+            for (var temp of map_tile) {
+                creategrid(temp, grid_style);
             }
-            var imgid = document.getElementById(imgx + ' - ' + imgy);
-            if (flag_grid) {
-                divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
-                imgid.style.border = grid_style;
-                gridcfg.textContent = 'グリッドをoffにする';
-                if (check_hex === 1) {
-                    document.getElementById('hex-' + imgy).style.border = grid_style;
-                }
-            } else {
-                divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
-                imgid.style.border = 'none';
-                gridcfg.textContent = 'グリッドをonにする';
-                if (check_hex === 1) {
-                    document.getElementById('hex-' + imgy).style.border = 'none';
+            if (check_hex === 1) {
+                for (var i = 1; i <= line; i++) {
+                    creategrid(document.getElementById('hex-' + i), grid_style);
                 }
             }
+            for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                if (i % 2 === 0) {
+                    document.getElementById('header-' + i).style.borderRight = grid_style;
+                    document.getElementById('header-' + i).style.borderLeft = grid_style;
+                }
+            }
+            gridcfg.textContent = 'グリッドをoffにする';
+        } else {
+            divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
+            var map_tile = document.getElementsByName('map-tile');
+            for (var temp of map_tile) {
+                temp.style.border = 'none';
+            }
+            if (check_hex === 1) {
+                for (var i = 1; i <= line; i++) {
+                    document.getElementById('hex-' + i).style.border = 'none';
+                }
+            }
+            for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                if (i % 2 === 0) {
+                    document.getElementById('header-' + i).style.border = 'none';
+                }
+            }
+            gridcfg.textContent = 'グリッドをonにする';
         }
         flag_grid = !flag_grid;
     }
+    function creategrid(elm, style) {
+        elm.style.borderRight = style;
+        elm.style.borderLeft = style;
+        elm.style.borderTop = style;
+    }
+
     var flag_grid_back = false;
     function sel_mass_fun() {
         if (!flag_syringe || !flag_copy || !flag_move) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
         if (flag_select) {
@@ -415,65 +565,79 @@
             } else {
                 flag_grid_back = false;
             }
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
+            divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
+            var map_tile = document.getElementsByName('map-tile');
+            for (var temp of map_tile) {
+                creategrid(temp, select_style[0]);
+            }
+            if (check_hex === 1) {
+                for (var i = 1; i <= line; i++) {
+                    creategrid(document.getElementById('hex-' + i), grid_style);
                 }
-                var imgid = document.getElementById(imgx + ' - ' + imgy);
-                divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
-                imgid.style.border = select_style[0];
-                if (check_hex === 1) {
-                    document.getElementById('hex-' + imgy).style.border = grid_style;
+            }
+            for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                if (i % 2 === 0) {
+                    document.getElementById('header-' + i).style.borderRight = grid_style;
+                    document.getElementById('header-' + i).style.borderLeft = grid_style;
                 }
-                imgid.onclick = get_select_f;
             }
             select_btn.textContent = '選択を確定';
+            clk_mode = 'select';
         } else {
             select_id.push(check_hex);
             imgx = 0;
             imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
+            if (!flag_grid_back) {
+                divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
+                var map_tile = document.getElementsByName('map-tile');
+                for (var temp of map_tile) {
+                    temp.style.border = 'none';
                 }
-                var imgid = document.getElementById(imgx + ' - ' + imgy);
-                if (!flag_grid_back) {
-                    divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
-                    imgid.style.border = 'none';
-                    if (check_hex === 1) {
-                        document.getElementById('hex-' + imgy).style.border = 'none';
-                    }
-                } else {
-                    imgid.style.border = grid_style;
-                    if (check_hex === 1) {
-                        document.getElementById('hex-' + imgy).style.border = grid_style;
+                if (check_hex === 1) {
+                    for (var i = 1; i <= line; i++) {
+                        document.getElementById('hex-' + i).style.border = 'none';
                     }
                 }
-                imgid.onclick = edit_f;
+                for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                    if (i % 2 === 0) {
+                        document.getElementById('header-' + i).style.border = 'none';
+                    }
+                }
+            } else {
+                var map_tile = document.getElementsByName('map-tile');
+                for (var temp of map_tile) {
+                    creategrid(temp, grid_style);
+                }
+                if (check_hex === 1) {
+                    for (var i = 1; i <= line; i++) {
+                        creategrid(document.getElementById('hex-' + i), grid_style);
+                    }
+                }
+                for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
+                    if (i % 2 === 0) {
+                        document.getElementById('header-' + i).style.borderRight = grid_style;
+                        document.getElementById('header-' + i).style.borderLeft = grid_style;
+                    }
+                }
             }
             select_btn.textContent = 'マスを選択';
+            clk_mode = 'edit'
         }
         flag_select = !flag_select;
     }
-    function get_select_f() {
+    function get_select_f(id) {
         try {
-            if (new RegExp(img_mess, 'g').test(document.getElementById(this.id).title)) {
+            if (/map-tile/g.test(document.getElementById(id).name)) {
                 if (select_id.length === 0) {
-                    select_id.push(this.id + '/=/' + document.getElementById(this.id).src);
-                    document.getElementById(this.id).style.border = select_style[2];
-                } else if (select_id.indexOf(this.id + '/=/' + document.getElementById(this.id).src) === - 1) {
-                    select_id.push(this.id + '/=/' + document.getElementById(this.id).src);
-                    document.getElementById(this.id).style.border = select_style[1];
+                    select_id.push(id + '/=/' + document.getElementById(id).src);
+                    creategrid(document.getElementById(id), select_style[2]);
+                } else if (select_id.indexOf(id + '/=/' + document.getElementById(id).src) === - 1) {
+                    select_id.push(id + '/=/' + document.getElementById(id).src);
+                    creategrid(document.getElementById(id), select_style[1]);
                 } else {
-                    select_id.splice(select_id.indexOf(this.id + '/=/' + document.getElementById(this.id).src), 1);
-                    document.getElementById(this.id).style.border = select_style[0];
-                    document.getElementById(select_id[0].split('/=/')[0]).style.border = select_style[2];
+                    select_id.splice(select_id.indexOf(id + '/=/' + document.getElementById(id).src), 1);
+                    creategrid(document.getElementById(id), select_style[0]);
+                    creategrid(document.getElementById(select_id[0].split('/=/')[0]), select_style[2]);
                 }
             }
         }
@@ -482,30 +646,21 @@
     }
     function syringe_fun() {
         if (!flag_select || !flag_copy || !flag_move) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
         if (flag_syringe) {
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
-                }
-                document.getElementById(imgx + ' - ' + imgy).onclick = syringe_get_fun;
-            }
+            clk_mode = 'syringe';
             syringe_btn.textContent = '取得したい地形を選択or[キャンセル]';
             flag_syringe = false;
         } else {
             syringe_b_def();
         }
     }
-    function syringe_get_fun() {
+    function syringe_get_fun(id) {
         try {
-            if (new RegExp(img_mess, 'g').test(document.getElementById(this.id).title)) {
-                var getimgs = document.getElementById(this.id).src;
+            if (/map-tile/g.test(document.getElementById(id).name)) {
+                var getimgs = document.getElementById(id).src;
                 getimgs = getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0];
                 if ((/@\d+/).test(getimgs)) {
                     valid.value = getimgs.match(/@\d+/g)[0].substr(1);
@@ -520,60 +675,30 @@
         }
     }
     function syringe_b_def() {
-        imgx = 0;
-        imgy = 1;
-        for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx++;
-            if (imgedit && imgedit % line === 0) {
-                imgy++;
-                imgx = 1;
-            }
-            document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
-        }
+        clk_mode = 'edit';
         syringe_btn.textContent = 'スポイトを使う';
         flag_syringe = true;
     }
     function select_copy_fun() {
         if (!flag_select || !flag_syringe || !flag_move) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
         if (select_id.length === 0) {
-            alert('選択されていません。')
+            alert('選択されていません。');
             return;
         }
         if (flag_copy) {
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
-                }
-                document.getElementById(imgx + ' - ' + imgy).onclick = try_copy_fun;
-            }
+            clk_mode = 'copy';
             copy_btn.textContent = 'コピー先の基準点を選択or[終了]';
             flag_copy = false;
         } else {
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
-                }
-                document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
-            }
+            clk_mode = 'edit';
             copy_btn.textContent = '選択された地形をコピー';
             flag_copy = true;
         }
     }
-    function try_copy_fun() {
-        img_back.length = 0;
-        draw_object_f(this.id);
-    }
+
     function draw_object_f(id) {
         var x_diff = parseInt(id.split(' - ')[0]) - parseInt(select_id[0].split('/=/')[0].split(' - ')[0]);
         var y_diff = parseInt(id.split(' - ')[1]) - parseInt(select_id[0].split('/=/')[0].split(' - ')[1]);
@@ -637,42 +762,24 @@
 
     function select_move_fun() {
         if (!flag_select || !flag_syringe || !flag_copy) {
-            alert('選択を確定してください。')
+            alert('選択を確定してください。');
             return;
         }
         if (select_id.length === 0) {
-            alert('選択されていません。')
+            alert('選択されていません。');
             return;
         }
         if (flag_move) {
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
-                }
-                document.getElementById(imgx + ' - ' + imgy).onclick = try_move_fun;
-            }
+            clk_mode = 'move';
             move_btn.textContent = '移動先の基準点を選択or[終了]';
             flag_move = false;
         } else {
-            imgx = 0;
-            imgy = 1;
-            for (var imgedit = 0; imgedit < line * line; imgedit++) {
-                imgx++;
-                if (imgedit && imgedit % line === 0) {
-                    imgy++;
-                    imgx = 1;
-                }
-                document.getElementById(imgx + ' - ' + imgy).onclick = edit_f;
-            }
+            clk_mode = 'edit';
             move_btn.textContent = '選択された地形を移動';
             flag_move = true;
         }
     }
-    function try_move_fun() {
+    function try_move_fun(id) {
         img_back.length = 0;
         getuser_select();
         for (var arr of select_id) {
@@ -687,7 +794,7 @@
                 document.getElementById(imgid).src = imgp + user_select + '.png';
             }
         }
-        draw_object_f(this.id);
+        draw_object_f(id);
         select_move_fun();
     }
 
@@ -713,17 +820,11 @@
     }
 
     function save_fun() {
-        imgx = 0;
-        imgy = 1;
         var save_data = "";
         var password = "";
-        for (var imgedit = 0; imgedit < line * line; imgedit++) {
-            imgx++;
-            if (imgedit && imgedit % line === 0) {
-                imgy++;
-                imgx = 1;
-            }
-            var getimgs = document.getElementById(imgx + ' - ' + imgy).src;
+        var map_tile = document.getElementsByName('map-tile');
+        for (var temp of map_tile) {
+            var getimgs = temp.src;
             save_data += (getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0] + ',');
         }
         save_data = save_data.split(',');

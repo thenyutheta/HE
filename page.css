@@ -6,7 +6,7 @@ body {
 .map-area-calss {
     position: absolute;
     width: calc(var(--width-pos) + 0px);
-    top: 2px;
+    top: 1px;
     left: 2px;
     line-height: 0;
 }
@@ -24,14 +24,19 @@ body {
     height: 700px;
 }
 
+.terr-sel-class{
+    position: absolute;
+    top: 130px;
+}
+
 .val_select_class {
     position: absolute;
-    top: 140px;
+    top: 160px;
 }
 
 .main-pen-class {
     position: absolute;
-    top: 140px;
+    top: 160px;
     left: 90px;
 }
 
@@ -39,26 +44,31 @@ body {
     display:none;
 }
 
+.command-xy-class{
+    position: absolute;
+    top: 190px;
+}
+
 .preview-class {
     position: absolute;
-    top: 180px;
+    top: 225px;
 }
 
 .syringe-class {
     position: absolute;
-    top: 220px;
+    top: 265px;
     font-size: 12px;
 }
 
 .select-mass-class {
     position: absolute;
-    top: 255px;
+    top: 295px;
 }
 
 .maptoimage-class {
     position: absolute;
     font-size: 12px;
-    top: 440px;
+    top: 445px;
 }
 
 .save-area-class {
@@ -74,6 +84,6 @@ body {
 
 .credit-class {
     position: absolute;
-    top: 650px;
+    top: 645px;
     font-size: 11px;
 }

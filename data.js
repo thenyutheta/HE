@@ -4,7 +4,7 @@ var pattern_press;
 (function () {
     'use strict';
     //[画像名,地形名,省略文字 {#N# => ,省略文字,省略文字,... ],
-    //~ヅ + <>
+    //~デ + <>
     terrain_data = [
         ["=0=", "空白", "/"],
         ["=sea=", "海", "0"],
@@ -33,6 +33,7 @@ var pattern_press;
         ["=seacity=", "海底都市", "に"],
         ["=seanewcity=", "海底新都市", "ぬ"],
         ["=seacapitalcity=", "海底首都", "ね"],
+        ["=chocolate=", "チョコレー都市", "デ"],
         ["=home#N#=", "自宅 (1 ~ 9)", "A", "B", "C", "D", "E", "F", "G", "H", "I"],
         ["=islandgove=", "島役所", "?"],
         ["=embassy=", "大使館", "ェ"],

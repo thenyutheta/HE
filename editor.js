@@ -90,9 +90,10 @@
 
     $('#maptoimage-id').on(eventType, () => {
         html2canvas(mapdiv).then(canvas => {
-            window.open('about:blank').document.write("<h4>リロードをすると消えます。ドラッグや右クリックで保存出来ます。</h4>" + "<img src='" + canvas.toDataURL() + "'/>");
+            window.open('about:blank').document.write("リロードをすると消えます。ドラッグや右クリックで保存出来ます。<br>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
+
     $('#save-cookie-id').on(eventType, () => {
         if (save_area.value.length === 0) {
             return;
@@ -187,7 +188,7 @@
 
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
-        if (confirm('未対応端末のようです。キャンバスを無効にして続行しますか？\nOK＝キャンバス無効化　キャンセル＝デフォルト')) {
+        if (confirm('非推奨端末のようです。\nキャンバスを無効(スマートフォンの場合少し使いやすくなります。)にして続行しますか？\nOK＝キャンバス無効化\nキャンセル＝デフォルト')) {
             cvs_chg_fun();
         }
     }
@@ -217,6 +218,10 @@
                 break;
         }
     }
+
+    $(window).on('beforeunload', function() {
+        return '';
+    });
 
     document.onselectstart = () => { return false; };
     document.ondragstart = () => { flag_drag = true; return false; };

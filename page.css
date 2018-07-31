@@ -37,7 +37,7 @@ body {
 .main-pen-class {
     position: absolute;
     top: 160px;
-    left: 90px;
+    left: 135px;
 }
 
 .sub-pen-class {
@@ -46,40 +46,40 @@ body {
 
 .command-xy-class{
     position: absolute;
-    top: 190px;
+    top: 195px;
 }
 
 .preview-class {
     position: absolute;
-    top: 225px;
+    top: 230px;
 }
 
 .syringe-class {
     position: absolute;
-    top: 265px;
+    top: 270px;
     font-size: 12px;
 }
 
 .select-mass-class {
     position: absolute;
-    top: 295px;
+    top: 300px;
 }
 
 .maptoimage-class {
     position: absolute;
     font-size: 12px;
-    top: 445px;
+    top: 465px;
 }
 
 .save-area-class {
     position: absolute;
-    top: 485px;
+    top: 500px;
     left: 0px;
 }
 
 .manual-class {
     position: absolute;
-    top: 610px;
+    top: 615px;
 }
 
 .credit-class {

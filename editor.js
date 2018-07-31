@@ -185,9 +185,8 @@
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
         flag_smart = true;
-        var spmess = document.createElement('h3');
-        spmess.textContent = '\nスクロール等は以下の余白を使って下さい。';
-        mapdiv.appendChild(spmess);
+        document.getElementById('spmess').style.display = '';
+        document.getElementById('spmess').style.top = (imgsize + 2) * (line + 1) + 10 + 'px';
     }
 
     function img_clk_sta() {

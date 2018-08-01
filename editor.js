@@ -102,7 +102,7 @@
     });
 
     $('#maptoimage-id').on(eventType, function() {
-        html2canvas(mapdiv).then(canvas => {
+        html2canvas(mapdiv).then(function(canvas) {
             window.open('about:blank').document.write("リロードをすると消えます。ドラッグや右クリックで保存出来ます。<br>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });

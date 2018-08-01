@@ -70,7 +70,7 @@
     preview.width = imgsize;
     preview.height = imgsize;
     /*
-    preview.onclick = () => {
+    preview.onclick = function() {
         if (confirm('開発中の機能を有効にしますか？動作が不安定になる可能性があります。。。')) {
             document.getElementById('beta-id').style = '';
         }
@@ -91,23 +91,23 @@
     $('#save-btn-id').on(eventType, save_fun);
     $('#load-btn-id').on(eventType, load_fun);
 
-    $('#copy-save-id').on(eventType, () => {
+    $('#copy-save-id').on(eventType, function() {
         if (save_area.value.length === 0) {
             return;
         }
         copyTextToClipboard(save_area.value);
     });
-    $('#clear-text-id').on(eventType, () => {
+    $('#clear-text-id').on(eventType, function() {
         save_area.value = '';
     });
 
-    $('#maptoimage-id').on(eventType, () => {
+    $('#maptoimage-id').on(eventType, function() {
         html2canvas(mapdiv).then(canvas => {
             window.open('about:blank').document.write("リロードをすると消えます。ドラッグや右クリックで保存出来ます。<br>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
 
-    $('#all-select-btn').on(eventType, () => {
+    $('#all-select-btn').on(eventType, function() {
         if (flag_select) {
             return;
         }
@@ -118,7 +118,7 @@
         }
     });
 
-    $('#all-cancel-btn').on(eventType, () => {
+    $('#all-cancel-btn').on(eventType, function() {
         if (flag_select) {
             return;
         }
@@ -129,13 +129,13 @@
         }
     });
 
-    $('#save-cookie-id').on(eventType, () => {
+    $('#save-cookie-id').on(eventType, function() {
         if (save_area.value.length === 0) {
             return;
         }
         Cookies.set('password', save_area.value, { path: '/', expires: 365 });
     });
-    $('#load-cookie-id').on(eventType, () => {
+    $('#load-cookie-id').on(eventType, function() {
         if (Cookies.get('password')) {
             save_area.value = Cookies.get('password');
         }
@@ -262,17 +262,17 @@
         return '';
     });
 
-    document.onselectstart = () => { return false; };
-    document.ondragstart = () => { flag_drag = true; return false; };
-    document.ontouchstart = () => { flag_drag = true; return false; };
-    document.onmousemove = (e) => {
+    document.onselectstart = function() { return false; };
+    document.ondragstart = function() { flag_drag = true; return false; };
+    document.ontouchstart = function() { flag_drag = true; return false; };
+    document.onmousemove = function(e) {
         if (e.which === 1 && e.clientX * e.clientY > 0) {
             elm = document.elementFromPoint(e.clientX, e.clientY);
             move_f();
         }
     }
 
-    $(document).on('touchmove', (e) => {
+    $(document).on('touchmove', function(e) {
         if (e.changedTouches[0].pageX * e.changedTouches[0].pageY > 0) {
             elm = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
             move_f();

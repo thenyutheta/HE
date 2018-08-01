@@ -1,17 +1,19 @@
 (function () {
     'use strict';
-    const mapdiv = document.getElementById('map-area-id');
-    const gridcfg = document.getElementById('grid-id');
-    const hexcfg = document.getElementById('hex-id');
-    const terrainid = document.getElementById('terrain_select');
-    const valid = document.getElementById('terrain_val_select');
-    const save_area = document.getElementById('save-area-id');
-    const preview = document.getElementById('preview-id');
-    const syringe_btn = document.getElementById('syringe-btn-id');
-    const copy_btn = document.getElementById('select-copy-btn');
-    const move_btn = document.getElementById('select-move-btn');
-    const select_btn = document.getElementById('select-mass-btn');
-    const sn_btn = document.getElementById('SN-btn-id');
+    /*const*/
+    var mapdiv = document.getElementById('map-area-id');
+    var gridcfg = document.getElementById('grid-id');
+    var hexcfg = document.getElementById('hex-id');
+    var terrainid = document.getElementById('terrain_select');
+    var valid = document.getElementById('terrain_val_select');
+    var save_area = document.getElementById('save-area-id');
+    var preview = document.getElementById('preview-id');
+    var syringe_btn = document.getElementById('syringe-btn-id');
+    var copy_btn = document.getElementById('select-copy-btn');
+    var move_btn = document.getElementById('select-move-btn');
+    var select_fill_btn = document.getElementById('select-fill-btn');
+    var select_btn = document.getElementById('select-mass-btn');
+    var sn_btn = document.getElementById('SN-btn-id');
 
     var flag_drag = false;
     var flag_smart = false;
@@ -45,21 +47,21 @@
     var isTouchDevice = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
     var eventType = (isTouchDevice) ? 'touchend' : 'click';
 
-    if( window.navigator.userAgent.toLowerCase().indexOf('chrome') != -1 ){
+    if (window.navigator.userAgent.toLowerCase().indexOf('chrome') != -1) {
         var bodyStyle, p2rfixStyle;
-    
-        document.getElementsByTagName('html')[0].style.height='100%';
-    
-        bodyStyle = document.getElementsByTagName('body')[0].style; 
+
+        document.getElementsByTagName('html')[0].style.height = '100%';
+
+        bodyStyle = document.getElementsByTagName('body')[0].style;
         bodyStyle.height = '100%';
         bodyStyle.overflowY = 'hidden';
-    
+
         p2rfixStyle = document.getElementById('p2rfix').style;
         p2rfixStyle.height = '100%';
         p2rfixStyle.overflow = 'auto';
     }
 
-    const divcsswid = document.querySelector('body');
+    /*const*/var divcsswid = document.querySelector('body');
     divcsswid.style.setProperty('--width-pos', imgsize * line + 'px');
 
     mapdiv.style.width = imgsize * line;
@@ -81,6 +83,7 @@
     $('#' + syringe_btn.id).on(eventType, syringe_fun);
     $('#' + copy_btn.id).on(eventType, select_copy_fun);
     $('#' + move_btn.id).on(eventType, select_move_fun);
+    $('#' + select_fill_btn.id).on(eventType, select_fill_fun);
     $('#' + select_btn.id).on(eventType, sel_mass_fun);
     $('#' + sn_btn.id).on(eventType, sn_fun);
     $('#back-id').on(eventType, edit_back_fun);
@@ -102,6 +105,28 @@
         html2canvas(mapdiv).then(canvas => {
             window.open('about:blank').document.write("リロードをすると消えます。ドラッグや右クリックで保存出来ます。<br>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
+    });
+
+    $('#all-select-btn').on(eventType, () => {
+        if (flag_select) {
+            return;
+        }
+        select_id.length = 0;
+        var map_tile = document.getElementsByName('map-tile');
+        for (var temp of map_tile) {
+            get_select_f(temp.id);
+        }
+    });
+
+    $('#all-cancel-btn').on(eventType, () => {
+        if (flag_select) {
+            return;
+        }
+        select_id.length = 0;
+        var map_tile = document.getElementsByName('map-tile');
+        for (var temp of map_tile) {
+            creategrid(temp, select_style[0]);
+        }
     });
 
     $('#save-cookie-id').on(eventType, () => {
@@ -135,58 +160,78 @@
         }
     }
 
+    //Set map tiles
     var crediv = document.createElement('div');
     crediv.id = 'headerdiv';
-    for (var i = 0; i < line * 2; i++) {
+    for (var i = 0; i <= line * 2; i++) {
         var creimg = document.createElement('img');
         creimg.src = imgp + 'sys/space.png';
         creimg.alt = 'E.';
+        if (i === line * 2) {
+            creimg.style.display = 'none';
+        }
         creimg.id = 'header-' + i;
         creimg.width = imgsize / 2;
         creimg.height = imgsize;
         crediv.appendChild(creimg);
     }
     mapdiv.appendChild(crediv);
-
     imgx = 0;
     imgy = 1;
     var child_div = document.createElement('div');
-    child_div.id = 'line-' + imgy;
-    child_div.className = 'child-div-class';
-    mapdiv.appendChild(child_div);
+    cre_chdiv();
     for (var imgedit = 0; imgedit < line * line; imgedit++) {
         imgx++;
         if (imgedit && imgedit % line === 0) {
+            cre_hex_img();
             imgy++;
             imgx = 1;
             var child_div = document.createElement('div');
-            child_div.id = 'line-' + imgy;
-            child_div.className = 'child-div-class';
-            mapdiv.appendChild(child_div);
+            cre_chdiv();
         }
         var child_img = document.createElement('img');
         child_img.src = imgp + terrain_data[1][0] + '.png';
         child_img.alt = 'E.';
         child_img.id = imgx + ' - ' + imgy;
         child_img.name = 'map-tile'
-        child_img.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess[0];
+        child_img.title = '( ' + (imgx - 1) + ',' + (imgy - 1) + ' ) ' + img_mess;
         child_img.width = imgsize;
         child_img.height = imgsize;
 
         child_img.onclick = img_clk_sta;
         child_div.appendChild(child_img);
     }
+    cre_hex_img();
     clk_mode = 'edit';
-
+    function cre_chdiv() {
+        child_div.id = 'line-' + imgy;
+        child_div.className = 'child-div-class';
+        mapdiv.appendChild(child_div);
+    }
+    function cre_hex_img() {
+        var hex_img = document.createElement('img');
+        hex_img.src = imgp + 'sys/space.png';
+        hex_img.alt = 'E.';
+        hex_img.style.display = 'none';
+        hex_img.width = imgsize / 2;
+        hex_img.height = imgsize;
+        hex_img.id = 'hex-' + imgy;
+        if (imgy % 2 !== 0) {
+            document.getElementById('line-' + imgy).insertBefore(hex_img, document.getElementById('1 - ' + imgy));
+        } else {
+            document.getElementById('line-' + imgy).appendChild(hex_img);
+        }
+    }
+    /*  */
     if (default_mode[0]) { grid_f(); }
     if (default_mode[1]) { hex_f(); }
     if (default_mode[2]) { sn_fun(); }
 
-    const u_a = navigator.userAgent.toUpperCase();
+    /*const*/var u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
         flag_smart = true;
         document.getElementById('spmess').style.display = '';
-        document.getElementById('spmess').style.top = (imgsize + 2) * (line + 1) + 10 + 'px';
+        document.getElementById('spmess').style.top = (imgsize + 1) * (line + 1) + 15 + 'px';
     }
 
     function img_clk_sta() {
@@ -205,7 +250,10 @@
                 draw_object_f(this.id);
                 break;
             case 'move':
-                try_move_fun(this.id);
+                img_back.length = 0;
+                try_fill_fun();
+                draw_object_f(this.id);
+                select_move_fun();
                 break;
         }
     }
@@ -223,7 +271,7 @@
             move_f();
         }
     }
- 
+
     $(document).on('touchmove', (e) => {
         if (e.changedTouches[0].pageX * e.changedTouches[0].pageY > 0) {
             elm = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
@@ -237,7 +285,7 @@
             try {
                 if (/map-tile/g.test(elm.name)) {
                     if (flag_smart && flag_scr) {
-                        $('body').css({ 'position': 'fixed'});
+                        $('body').css({ 'position': 'fixed' });
                     }
                     flag_scr = false;
                     document.getElementById(elm.id).onclick();
@@ -253,10 +301,24 @@
             var drag_back_clone = $.extend(true, [], drag_back);
             var appendarr = [];
             for (var dbc_arr of drag_back_clone) {
-                for (var arr of dbc_arr[0]) {
+                for (var arr of dbc_arr) {
                     appendarr.push(arr);
                 }
             }
+
+            if (!flag_copy) {
+                var temp = [];
+                for (var arr of appendarr){
+                    var arrnum = temp.findIndex(function (elm) { return elm.indexOf(arr[0]) >= 0; });
+                    if (arrnum >= 0){
+                       temp[arrnum][2] = arr[2];
+                    } else {
+                       temp.push(arr);
+                    }
+                }
+                appendarr = $.extend(true, [], temp)
+            }
+            
             edit_back.push($.extend(true, [], appendarr));
             edit_next.length = 0;
             if (edit_back.length > back_max) {
@@ -265,7 +327,7 @@
         }
         drag_back.length = 0;
         if (flag_smart) {
-            $('body').css({ 'position': 'absolute'});
+            $('body').css({ 'position': 'absolute' });
         }
         flag_scr = true;
     }
@@ -392,19 +454,7 @@
                 }
             }
         }
-        var img_back_clone = $.extend(true, [], img_back);
-        if (img_back_clone.length !== 0) {
-            pass_back = '';
-            if (flag_drag) {
-                drag_back.push([img_back_clone]);
-            } else {
-                edit_back.push(img_back_clone);
-            }
-            edit_next.length = 0;
-        }
-        if (edit_back.length > back_max) {
-            edit_back.shift();
-        }
+        set_backups();
     }
     function imgsrc_judge(id) {
         var getimgs = document.getElementById(id).src;
@@ -439,9 +489,24 @@
         }
         return result;
     }
+    function set_backups() {
+        var img_back_clone = $.extend(true, [], img_back);
+        if (img_back_clone.length !== 0) {
+            pass_back = '';
+            if (flag_drag) {
+                drag_back.push(img_back_clone);
+            } else {
+                edit_back.push(img_back_clone);
+            }
+            edit_next.length = 0;
+        }
+        if (edit_back.length > back_max) {
+            edit_back.shift();
+        }
+    }
 
     function hex_f() {
-        if (!flag_select || !flag_syringe) {
+        if (!flag_select) {
             alert('選択を確定してください。');
             return;
         }
@@ -450,48 +515,32 @@
             hex_wid = imgsize / 2;
             check_hex = 1;
             for (var i = 1; i <= line; i++) {
-                var hex_img = document.createElement('img');
-                hex_img.src = imgp + 'sys/space.png';
-                hex_img.alt = 'E.';
-                hex_img.width = hex_wid;
-                hex_img.height = imgsize;
-                hex_img.id = 'hex-' + i;
-                if (i % 2 !== 0) {
-                    document.getElementById('line-' + i).insertBefore(hex_img, document.getElementById('1 - ' + i));
-                } else {
-                    document.getElementById('line-' + i).appendChild(hex_img);
-                }
+                document.getElementById('hex-' + i).style.display = '';
             }
-            var creimg = document.createElement('img');
-            creimg.src = imgp + 'sys/space.png';
-            creimg.alt = 'E.';
-            creimg.id = 'header-' + line * 2;
-            creimg.width = imgsize / 2;
-            creimg.height = imgsize;
-            document.getElementById('headerdiv').insertBefore(creimg, document.getElementById('header-' + line * 2 - 1));
-
+            document.getElementById('header-' + line * 2).style.display = '';
             document.getElementById('hex-pen-id').className = 'main-pen-class';
             document.getElementById('n-pen-id').className = 'sub-pen-class';
-            grid_f();
-            grid_f();
         } else {
             hexcfg.textContent = 'マスをhexにする';
             hex_wid = 0;
             check_hex = 0;
-            grid_f();
-            grid_f();
             for (var i = 1; i <= line; i++) {
-                document.getElementById('hex-' + i).outerHTML = '';
+                document.getElementById('hex-' + i).style.display = 'none';
             }
-            document.getElementById('header-' + line * 2).outerHTML = '';
+            document.getElementById('header-' + line * 2).style.display = 'none';
             document.getElementById('hex-pen-id').className = 'sub-pen-class';
             document.getElementById('n-pen-id').className = 'main-pen-class';
+        }
+        if (document.getElementById('1 - 1').style.borderTop === grid_style) {
+            divcsswid.style.setProperty('--width-pos', imgsize * line + line * 2 + hex_wid + 2 + 'px');
+        } else {
+            divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
         }
         flag_hex = !flag_hex;
     }
 
     function grid_f() {
-        if (!flag_select || !flag_syringe) {
+        if (!flag_select) {
             alert('選択を確定してください。');
             return;
         }
@@ -501,10 +550,8 @@
             for (var temp of map_tile) {
                 creategrid(temp, grid_style);
             }
-            if (check_hex === 1) {
-                for (var i = 1; i <= line; i++) {
-                    creategrid(document.getElementById('hex-' + i), grid_style);
-                }
+            for (var i = 1; i <= line; i++) {
+                creategrid(document.getElementById('hex-' + i), grid_style);
             }
             for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
                 if (i % 2 === 0) {
@@ -519,10 +566,8 @@
             for (var temp of map_tile) {
                 temp.style.border = 'none';
             }
-            if (check_hex === 1) {
-                for (var i = 1; i <= line; i++) {
-                    document.getElementById('hex-' + i).style.border = 'none';
-                }
+            for (var i = 1; i <= line; i++) {
+                document.getElementById('hex-' + i).style.border = 'none';
             }
             for (var i = 0; i < document.getElementById('headerdiv').childElementCount; i++) {
                 if (i % 2 === 0) {
@@ -541,8 +586,7 @@
 
     var flag_grid_back = false;
     function sel_mass_fun() {
-        if (!flag_syringe || !flag_copy || !flag_move) {
-            alert('選択を確定してください。');
+        if (!sel_f_alert('select')) {
             return;
         }
         if (flag_select) {
@@ -568,12 +612,12 @@
                     document.getElementById('header-' + i).style.borderLeft = grid_style;
                 }
             }
+            document.getElementById('all-select-btn').style.display = '';
+            document.getElementById('all-cancel-btn').style.display = '';
             select_btn.textContent = '選択を確定';
             clk_mode = 'select';
         } else {
             select_id.push(check_hex);
-            imgx = 0;
-            imgy = 1;
             if (!flag_grid_back) {
                 divcsswid.style.setProperty('--width-pos', imgsize * line + hex_wid + 'px');
                 var map_tile = document.getElementsByName('map-tile');
@@ -607,8 +651,10 @@
                     }
                 }
             }
+            document.getElementById('all-select-btn').style.display = 'none';
+            document.getElementById('all-cancel-btn').style.display = 'none';
             select_btn.textContent = 'マスを選択';
-            clk_mode = 'edit'
+            clk_mode = 'edit';
         }
         flag_select = !flag_select;
     }
@@ -631,9 +677,9 @@
         catch (e) {
         }
     }
+
     function syringe_fun() {
-        if (!flag_select || !flag_copy || !flag_move) {
-            alert('選択を確定してください。');
+        if (!sel_f_alert('syringe')) {
             return;
         }
         if (flag_syringe) {
@@ -653,7 +699,7 @@
                     valid.value = getimgs.match(/@\d+/g)[0].substr(1);
                 }
                 getimgs = getimgs.replace(/@\d+/g, '#N#');
-                terrainid.value = getimgs + '/' + terrain_data.findIndex(function (element, index, array) { return element.indexOf(getimgs) >= 0; });
+                terrainid.value = getimgs + '/' + terrain_data.findIndex(function (elm) { return elm.indexOf(getimgs) >= 0; });
                 drawpreview();
                 syringe_b_def();
             }
@@ -667,8 +713,7 @@
         flag_syringe = true;
     }
     function select_copy_fun() {
-        if (!flag_select || !flag_syringe || !flag_move) {
-            alert('選択を確定してください。');
+        if (!sel_f_alert('copy')) {
             return;
         }
         if (select_id.length === 0) {
@@ -736,20 +781,11 @@
                 }
             }
         }
-        var img_back_clone = $.extend(true, [], img_back);
-        if (img_back_clone.length !== 0) {
-            pass_back = '';
-            edit_back.push(img_back_clone);
-            edit_next.length = 0;
-        }
-        if (edit_back.length > back_max) {
-            edit_back.shift();
-        }
+        set_backups();
     }
 
     function select_move_fun() {
-        if (!flag_select || !flag_syringe || !flag_copy) {
-            alert('選択を確定してください。');
+        if (!sel_f_alert('move')) {
             return;
         }
         if (select_id.length === 0) {
@@ -766,8 +802,21 @@
             flag_move = true;
         }
     }
-    function try_move_fun(id) {
+
+    function select_fill_fun() {
+        if (!sel_f_alert('')) {
+            return;
+        }
+        if (select_id.length === 0) {
+            alert('選択されていません。');
+            return;
+        }
         img_back.length = 0;
+        try_fill_fun();
+        set_backups()
+    }
+
+    function try_fill_fun() {
         getuser_select();
         for (var arr of select_id) {
             if (arr === 0 || arr === 1) {
@@ -781,8 +830,20 @@
                 document.getElementById(imgid).src = imgp + user_select + '.png';
             }
         }
-        draw_object_f(id);
-        select_move_fun();
+    }
+
+    function sel_f_alert(no_check) {
+        var temp = true;
+        var alert_flags = [['syringe', flag_syringe], ['select', flag_select], ['copy', flag_copy],
+        /*              */['move', flag_move]];
+        for (var arr of alert_flags) {
+            if (arr[0] !== no_check && !arr[1]) {
+                alert('選択を確定してください。');
+                temp = false;
+                break;
+            }
+        }
+        return temp;
     }
 
     function edit_back_fun() {
@@ -899,17 +960,13 @@
             }
             i++;
         }
-        imgx = 0;
-        imgy = 1;
+        var i = 0;
         img_back.length = 0;
-        for (var i = 0; i < line * line; i++) {
-            imgx++;
-            if (i && i % line === 0) {
-                imgy++;
-                imgx = 1;
-            }
-            img_back.push([(imgx + ' - ' + imgy), document.getElementById(imgx + ' - ' + imgy).src, imgp + save_data[i] + '.png']);
-            document.getElementById(imgx + ' - ' + imgy).src = imgp + save_data[i] + '.png';
+        var map_tile = document.getElementsByName('map-tile');
+        for (var temp of map_tile) {
+            img_back.push([temp.id, temp.src, imgp + save_data[i] + '.png']);
+            temp.src = imgp + save_data[i] + '.png';
+            i++;
         }
         var img_back_clone = $.extend(true, [], img_back);
         edit_back.push(img_back_clone);

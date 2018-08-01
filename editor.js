@@ -1,19 +1,18 @@
 (function () {
     'use strict';
-    /*const*/
-    var mapdiv = document.getElementById('map-area-id');
-    var gridcfg = document.getElementById('grid-id');
-    var hexcfg = document.getElementById('hex-id');
-    var terrainid = document.getElementById('terrain_select');
-    var valid = document.getElementById('terrain_val_select');
-    var save_area = document.getElementById('save-area-id');
-    var preview = document.getElementById('preview-id');
-    var syringe_btn = document.getElementById('syringe-btn-id');
-    var copy_btn = document.getElementById('select-copy-btn');
-    var move_btn = document.getElementById('select-move-btn');
-    var select_fill_btn = document.getElementById('select-fill-btn');
-    var select_btn = document.getElementById('select-mass-btn');
-    var sn_btn = document.getElementById('SN-btn-id');
+   const mapdiv = document.getElementById('map-area-id');
+   const gridcfg = document.getElementById('grid-id');
+   const hexcfg = document.getElementById('hex-id');
+   const terrainid = document.getElementById('terrain_select');
+   const valid = document.getElementById('terrain_val_select');
+   const save_area = document.getElementById('save-area-id');
+   const preview = document.getElementById('preview-id');
+   const syringe_btn = document.getElementById('syringe-btn-id');
+   const copy_btn = document.getElementById('select-copy-btn');
+   const move_btn = document.getElementById('select-move-btn');
+   const select_fill_btn = document.getElementById('select-fill-btn');
+   const select_btn = document.getElementById('select-mass-btn');
+   const sn_btn = document.getElementById('SN-btn-id');
 
     var flag_drag = false;
     var flag_smart = false;
@@ -61,16 +60,16 @@
         p2rfixStyle.overflow = 'auto';
     }
 
-    /*const*/var divcsswid = document.querySelector('body');
+    const divcsswid = document.querySelector('body');
     divcsswid.style.setProperty('--width-pos', imgsize * line + 'px');
 
     mapdiv.style.width = imgsize * line;
-    mapdiv.oncontextmenu = function() { return false; }
+    mapdiv.oncontextmenu = () => { return false; }
 
     preview.width = imgsize;
     preview.height = imgsize;
     /*
-    preview.onclick = function() {
+    preview.onclick = () => {
         if (confirm('開発中の機能を有効にしますか？動作が不安定になる可能性があります。。。')) {
             document.getElementById('beta-id').style = '';
         }
@@ -91,23 +90,23 @@
     $('#save-btn-id').on(eventType, save_fun);
     $('#load-btn-id').on(eventType, load_fun);
 
-    $('#copy-save-id').on(eventType, function() {
+    $('#copy-save-id').on(eventType, () => {
         if (save_area.value.length === 0) {
             return;
         }
         copyTextToClipboard(save_area.value);
     });
-    $('#clear-text-id').on(eventType, function() {
+    $('#clear-text-id').on(eventType, () => {
         save_area.value = '';
     });
 
-    $('#maptoimage-id').on(eventType, function() {
-        html2canvas(mapdiv).then(function(canvas) {
+    $('#maptoimage-id').on(eventType, () => {
+        html2canvas(mapdiv).then(canvas => {
             window.open('about:blank').document.write("リロードをすると消えます。ドラッグや右クリックで保存出来ます。<br>" + "<img src='" + canvas.toDataURL() + "'/>");
         });
     });
 
-    $('#all-select-btn').on(eventType, function() {
+    $('#all-select-btn').on(eventType, () => {
         if (flag_select) {
             return;
         }
@@ -118,7 +117,7 @@
         }
     });
 
-    $('#all-cancel-btn').on(eventType, function() {
+    $('#all-cancel-btn').on(eventType, () => {
         if (flag_select) {
             return;
         }
@@ -129,13 +128,13 @@
         }
     });
 
-    $('#save-cookie-id').on(eventType, function() {
+    $('#save-cookie-id').on(eventType, () => {
         if (save_area.value.length === 0) {
             return;
         }
         Cookies.set('password', save_area.value, { path: '/', expires: 365 });
     });
-    $('#load-cookie-id').on(eventType, function() {
+    $('#load-cookie-id').on(eventType, () => {
         if (Cookies.get('password')) {
             save_area.value = Cookies.get('password');
         }
@@ -227,7 +226,7 @@
     if (default_mode[1]) { hex_f(); }
     if (default_mode[2]) { sn_fun(); }
 
-    /*const*/var u_a = navigator.userAgent.toUpperCase();
+    const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
         flag_smart = true;
         document.getElementById('spmess').style.display = '';
@@ -262,17 +261,17 @@
         return '';
     });
 
-    document.onselectstart = function() { return false; };
-    document.ondragstart = function() { flag_drag = true; return false; };
-    document.ontouchstart = function() { flag_drag = true; return false; };
-    document.onmousemove = function(e) {
+    document.onselectstart = () => { return false; };
+    document.ondragstart = () => { flag_drag = true; return false; };
+    document.ontouchstart = () => { flag_drag = true; return false; };
+    document.onmousemove = (e) => {
         if (e.which === 1 && e.clientX * e.clientY > 0) {
             elm = document.elementFromPoint(e.clientX, e.clientY);
             move_f();
         }
     }
 
-    $(document).on('touchmove', function(e) {
+    $(document).on('touchmove', (e) => {
         if (e.changedTouches[0].pageX * e.changedTouches[0].pageY > 0) {
             elm = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
             move_f();

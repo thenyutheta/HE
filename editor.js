@@ -65,7 +65,7 @@
     divcsswid.style.setProperty('--width-pos', imgsize * line + 'px');
 
     mapdiv.style.width = imgsize * line;
-    mapdiv.oncontextmenu = () => { return false; }
+    mapdiv.oncontextmenu = function() { return false; }
 
     preview.width = imgsize;
     preview.height = imgsize;

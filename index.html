@@ -7,106 +7,118 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="page.css">
     <link rel="icon" href="./images/sys/editor_favicon.png" type="images/png">
-    <title>Hakoniwa Editor ver 0.2.5</title>
+    <title>Hakoniwa Editor ver 0.3.0</title>
 </head>
 
 <body>
     <div id="p2rfix">
-    <div id="map-area-id" class="map-area-calss"></div>
-    <div id="spmess" style="position: absolute; display: none; width: 350px;">スクロール等は以下の余白を使って下さい。</div>
-    <div id="toolbox-area-id" class="toolbox-area-class">
-        <font size="6" color="black">===[Tool Box]===</font>
-        <br>
-        <button style="font-size: 11px;" id="SN-btn-id">Space Numberを有効にする</button>
-        <br>
-        <button id="grid-id">グリッドをonにする</button>
-        　<button id="hex-id">マスをhexにする</button>
-        <br>
-        <button id="back-id">前の操作へ</button>
-        <button id="next-id">次の操作へ</button>
-        <div class="terr-sel-class">
-            地形選択　:　<select id="terrain_select"></select>
+        <div id="map-area-id" class="map-area-calss"></div>
+        <div id="spmess" style="position: absolute; display: none; width: 700px;">
+            スクロールはボタンまたは以下の余白を使って下さい。
+            <button id="sp-toleft">マップへ。</button>
+            <button id="sp-toright">ツールボックスへ。</button>
         </div>
-        <div class="val_select_class">
-            値：<select id="terrain_val_select"></select>
-        </div>
-        <br>
-        <div id="n-pen-id" class="main-pen-class">
-            ペンの太さ：
-            <select id="pen_size_select">
-                <option value="1">1 x 1</option>
-                <option value="3">3 x 3</option>
-                <option value="5">5 x 5</option>
-                <option value="7">7 x 7</option>
-                <option value="9">9 x 9</option>
-                <option value="11">11 x 11</option>
-                <option value="13">13 x 13</option>
-                <option value="15">15 x 15</option>
-                <option value="17">17 x 17</option>
-                <option value="19">19 x 19</option>
-                <option value="27">27 x 27</option>
-            </select>
-        </div>
-        <div id="hex-pen-id" class="sub-pen-class">
-            ペンの太さ：
-            <select id="hex_pen_size_select">
-                <option value="1">1hex</option>
-                <option value="2">7hex</option>
-                <option value="3">19hex</option>
-                <option value="4">37hex</option>
-                <option value="5">61hex</option>
-                <option value="6">91hex</option>
-                <option value="7">127hex</option>
-                <option value="8">169hex</option>
-                <option value="9">217hex</option>
-                <option value="10">271hex</option>
-                <option value="11">331hex</option>
-                <option value="16">721hex</option>
-            </select>
-        </div>
-        <div class="preview-class">
-            地形プレビュー　:　
-            <img id="preview-id" src="./images/=0=.png" alt="E.">
-        </div>
-        <div class="save-area-class">
-            <input type="text" id="save-area-id">
+        <div id="toolbox-area-id" class="toolbox-area-class">
+            <font size="6" color="black">===[Tool Box]===</font>
+            <img id="temporary" style="display: none;">
             <br>
-            <button id="save-btn-id" style="font-size: 11px">　パスワードを生成　　</button>
-            　 <button id="load-btn-id" style="font-size: 11px">　パスワードから復元　　</button>
+            <button style="font-size: 11px;" id="SN-btn-id">座標マスを有効にする</button>
+            <span>　</span><button style="font-size: 11px;" id="header-btn-id">ヘッダーを有効にする</button>
             <br>
-            <button id="save-cookie-id" style="font-size: 10px">パスワードをCookieに保存</button>
-            　 <button id="load-cookie-id" style="font-size: 10px">パスワードをCookieから復元</button>
+            <button id="grid-id" style="font-size: 12px">グリッドをonにする</button>
+            <span>　</span><button id="hex-id" style="font-size: 12px">マスをhexにする</button>
             <br>
-            <button id="copy-save-id" style="font-size: 11px">パスワードをコピーする</button>
-            　 <button id="clear-text-id" style="font-size: 11px">テキストボックスをクリア</button>
-        </div>
-        <button class="syringe-class" id="syringe-btn-id">スポイトを使う</button>
-        <div class="select-mass-class">
-            <button id="select-mass-btn">マスを選択</button>
-            　　<button id="all-select-btn" style="display: none">全選択</button>
-            　<button id="all-cancel-btn" style="display: none">全解除</button>
+            <button id="back-id">前の操作へ</button>
+            <button id="next-id">次の操作へ</button>
+            <div class="terr-sel-class">
+                地形選択:　<select id="terrain_select"></select>
+            </div>
+            <div class="val_select_class">
+                値：<select id="terrain_val_select"></select>
+            </div>
             <br>
-            <button id="select-copy-btn">選択された地形をコピー</button>
-            <br>
-            <button id="select-move-btn">選択された地形を移動</button>
-            <br>
-            <button id="select-fill-btn">選択された地形を塗りつぶす</button>
-        </div>
-        <div id="beta-id" style="display:none;">
+            <div id="n-pen-id" class="main-pen-class">
+                ペンの太さ：
+                <select id="pen_size_select">
+                    <option value="1">1 x 1</option>
+                    <option value="3">3 x 3</option>
+                    <option value="5">5 x 5</option>
+                    <option value="7">7 x 7</option>
+                    <option value="9">9 x 9</option>
+                    <option value="11">11 x 11</option>
+                    <option value="13">13 x 13</option>
+                    <option value="15">15 x 15</option>
+                    <option value="17">17 x 17</option>
+                    <option value="19">19 x 19</option>
+                    <option value="27">27 x 27</option>
+                </select>
+            </div>
+            <div id="hex-pen-id" class="sub-pen-class">
+                ペンの太さ：
+                <select id="hex_pen_size_select">
+                    <option value="1">1hex</option>
+                    <option value="2">7hex</option>
+                    <option value="3">19hex</option>
+                    <option value="4">37hex</option>
+                    <option value="5">61hex</option>
+                    <option value="6">91hex</option>
+                    <option value="7">127hex</option>
+                    <option value="8">169hex</option>
+                    <option value="9">217hex</option>
+                    <option value="10">271hex</option>
+                    <option value="11">331hex</option>
+                    <option value="16">721hex</option>
+                </select>
+            </div>
+            <div class="preview-class">
+                <span style="font-size: 13px">地形プレビュー:　</span>
+                <img id="preview-id" src="./images/=0=.png" alt="E.">
+            </div>
+            <div class="save-area-class">
+                <input type="text" id="save-area-id">
+                <br>
+                <button id="save-btn-id" style="font-size: 11px">　パスワードを生成　　</button>
+                <span>　</span><button id="load-btn-id" style="font-size: 11px">　パスワードから復元　　</button>
+                <br>
+                <button id="save-cookie-id" style="font-size: 10px">パスワードをCookieに保存</button>
+                <span>　</span><button id="load-cookie-id" style="font-size: 10px">パスワードをCookieから復元</button>
+                <br>
+                <button id="copy-save-id" style="font-size: 11px">パスワードをコピーする</button>
+                <span>　</span><button id="clear-text-id" style="font-size: 11px">テキストボックスをクリア</button>
+                <br> <button id="passTourl-id" style="font-size: 11px">URL生成 (ポップアップ)</button>
+            </div>
+            <div class="syringe-class">
+                <button id="syringe-btn-id" style="font-size: 12px">スポイトを使う</button>
+                <br><button id="replace-btn-id" style="font-size: 12px">置換する</button>
+            </div>
+            <div class="select-mass-class">
+                <button id="select-mass-btn" style="font-size: 12px">マスを選択</button>
+                <button id="flip-select-btn" style="display: none; font-size: 11px">選択を反転</button>
+                <button id="all-select-btn" style="display: none; font-size: 11px">全選択</button>
+                <button id="all-cancel-btn" style="display: none; font-size: 11px">全解除</button>
+                <br>
+                <button id="select-copy-btn" style="font-size: 12px">選択された地形をコピー</button>
+                <br>
+                <button id="select-move-btn" style="font-size: 12px">選択された地形を移動</button>
+                <br>
+                <button id="select-fill-btn" style="font-size: 12px">選択された地形を塗りつぶす</button>
+            </div>
+            <div id="beta-id" style="display:none;">
 
+            </div>
+            <a href="./manual.html" target="_blank" class="manual-class">マニュアル</a>
+            <button id="maptoimage-id" class="maptoimage-class" style="font-size: 12px">マップを画像に変換(ポップアップ)</button>
+            <div class="credit-class">
+                使用画像:
+                <a href="http://www5b.biglobe.ne.jp/~k-e-i/" target="_blank">Hakoniwa R.A.(跡地)</a> &
+                <a href="http://hakoniwa.symphonic-net.com/" target="_blank">箱庭諸島S.E(跡地)</a>
+                <br>
+                <a href="http://81.la/~uhyo/" target="_blank">箱庭諸島 GS</a>
+                <br>スクリプト:theta
+            </div>
         </div>
-        <a href="./manual.html" target="_blank" class="manual-class">マニュアル</a>
-        <button id="maptoimage-id" class="maptoimage-class">マップを画像に変換(ポップアップ)</button>
-        <div class="credit-class">
-            使用画像:
-            <a href="http://www5b.biglobe.ne.jp/~k-e-i/" target="_blank">Hakoniwa R.A.(跡地)</a> &
-            <a href="http://hakoniwa.symphonic-net.com/" target="_blank">箱庭諸島S.E(跡地)</a>
-            <br>
-            　　　　　<a href="http://81.la/~uhyo/" target="_blank">箱庭諸島 GS</a>
-            <br>スクリプト:theta
-        </div>
+
     </div>
-　　</div>
     <script src="plugins/jquery-3.3.1.min.js" type="text/javascript"></script>
     <script src="plugins/js.cookie-2.2.0.min.js" type="text/javascript"></script>
     <script src="plugins/html2canvas.min.js" type="text/javascript"></script>

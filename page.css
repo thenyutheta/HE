@@ -1,7 +1,9 @@
 body {
+    position: absolute;
     background-color: rgb(149, 208, 248);
     --width-pos: 640px;
-    left: 0px;
+    left: -8px;
+    top: -8px;
 }
 
 .map-area-calss {
@@ -22,7 +24,7 @@ body {
     left: calc(var(--width-pos) + 20px);
     background-color: rgb(97, 255, 181);
     width: 320px;
-    height: 700px;
+    height: 100%;
 }
 
 .terr-sel-class{
@@ -53,12 +55,11 @@ body {
 .syringe-class {
     position: absolute;
     top: 240px;
-    font-size: 12px;
 }
 
 .select-mass-class {
     position: absolute;
-    top: 270px;
+    top: 350px;
 }
 
 .maptoimage-class {
@@ -69,8 +70,9 @@ body {
 
 .save-area-class {
     position: absolute;
-    top: 500px;
+    top: 495px;
     left: 0px;
+    line-height: 22px;
 }
 
 .manual-class {

@@ -193,8 +193,9 @@
     if (urlopti['add_data']) {
         var temp = urlopti['add_data'].split('${a}');
         for (var i of temp) {
-            i = i.split(',')
-            i[0] = '##add##' + i[0].replace('${n}', '#N#');
+            i = i.split(',');
+            document.getElementById('temporary').src = i[0];
+            i[0] = '##add##' + document.getElementById('temporary').src.replace(/@\d+/, '${n}').replace('${n}', '#N#');
             terrain_data.push(i)
         }
     }
@@ -205,10 +206,14 @@
             pattern_press.push([i[0], i[1]]);
         }
     }
+    //if (urlopti['']) {}
     var i = 0;
     for (var imgdaAr of terrain_data) {
         var creopti = document.createElement('option');
         creopti.value = imgdaAr[0] + '${n}' + i;
+        if (imgdaAr[0].indexOf('##add##') > -1) {
+            creopti.style.color = '#EE2211';
+        }
         creopti.textContent = imgdaAr[1];
         terrainid.appendChild(creopti);
         i++;
@@ -810,7 +815,7 @@
                 if (getimgs.search(imgp) >= 0) {
                     getimgs = getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0];
                 } else {
-                    getimgs =  '##add##' + decodeURIComponent(getimgs);
+                    getimgs =  '##add##' + getimgs;
                 }
                 if ((/@\d+/).test(getimgs)) {
                     valid.value = getimgs.match(/@\d+/g)[0].substr(1);

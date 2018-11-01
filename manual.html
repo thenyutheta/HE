@@ -159,14 +159,20 @@
         <tr>
             <td>theme</td>
             <td>メインの背景色と、ツールボックスの背景色を設定。rgbは"#"を"$"に変える。</td>
-            <td>例1　theme=blue,green
+            <td>theme=MainBGColor,ToolsBGColor
+                <br>例1　theme=blue,green
                 <br>例2　theme=$E1D2C3,$2F3E4D
+                <br>何も指定しないとdefaultの設定を使用する。
+                <br>theme=,blue (ToolsBGColorの設定だけ変更。)
             </td>
         </tr>
         <tr>
             <td>mode</td>
             <td>順に、grid,hex,座標マス,headerのデフォルト状態を設定。</td>
-            <td>mode=0,1,1,1　　(数値のみ)</td>
+            <td>mode=0,1,1,1　　(0 or 1 のみ)
+                <br>何も指定しないとdefaultの設定を使用する。
+                <br>mode=1,,, (gridの設定だけ変更。)
+            </td>
         </tr>
         <tr>
             <td>pass</td>
@@ -555,11 +561,24 @@
     <br>
     <br> 
     -->
+    <font size="5">・ver 0.3.2</font>
+    <br>地形の変更 : 公孫樹/桜を追加。
+    <br>機能の変更 :
+    <br>?add_dataの不具合を修正
+    <br>?mode,themeに未指定オプションを追加。
+    <br>
+    <br>その他の変更 :
+    <br>javascriptの小さな修正。
+    <br>UIの小さな修正。
+    <br>不要なファイルを削除。
+    <br>README.mdを追加。
+    <br>
+    <br>
     <font size="5">・ver 0.3.1</font>
     <br>地形の変更 : サボテン、薔薇を追加。
     <br>機能の変更 : ?add_dataの仕様を改善。
     <br>
-    <br> 
+    <br>
     <font size="5">・ver 0.3.0</font>
     <br>地形の変更 : 怪獣の置物(ダークいのら、テトラ、めたはむ)、ピラミッド、バッグを追加。
     <br>機能の変更 :
@@ -675,7 +694,14 @@
     <br>
     <script src="cfg.js" type="text/javascript"></script>
     <script src="data.js" type="text/javascript"></script>
-    <script src="manual.js" type="text/javascript"></script>
+    <script>
+        'use strict';
+        for (let Arr of terrain_data) {
+            let creli = document.createElement('li');
+            creli.innerHTML = '<img src=' + imgp + Arr[0].replace('#N#', '@1') + '.png' + ' alt=E. width=' + imgsize + 'height=' + imgsize + '>' + Arr[1];
+            document.getElementById('terrain-list-id').appendChild(creli);
+        }
+    </script>
 </body>
 
 </html>

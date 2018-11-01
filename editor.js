@@ -15,6 +15,7 @@
     const sn_btn = document.getElementById('SN-btn-id');
     const header_btn = document.getElementById('header-btn-id');
     const replacebtn = document.getElementById('replace-btn-id');
+    const tempElm = document.getElementById('temporary');
 
     var flag_drag = false;
     var flag_smart = false;
@@ -187,15 +188,15 @@
     }
     if (urlopti['theme']) {
         var temp = urlopti['theme'].split(',');
-        if (temp[0]) { document.body.style.backgroundColor = temp[0].replace('$', '#') };
-        if (temp[1]) { document.getElementById('toolbox-area-id').style.backgroundColor = temp[1].replace('$', '#') };
+        if (temp[0] && temp[0].length !== 0) { document.body.style.backgroundColor = temp[0].replace('$', '#'); };
+        if (temp[1] && temp[1].length !== 0) { document.getElementById('toolbox-area-id').style.backgroundColor = temp[1].replace('$', '#'); };
     }
     if (urlopti['add_data']) {
         var temp = urlopti['add_data'].split('${a}');
         for (var i of temp) {
             i = i.split(',');
-            document.getElementById('temporary').src = i[0];
-            i[0] = '##add##' + document.getElementById('temporary').src.replace(/@\d+/, '${n}').replace('${n}', '#N#');
+            tempElm.src = i[0].replace('${n}', '@1');
+            i[0] = '##add##' + tempElm.src.replace('@1', '#N#');
             terrain_data.push(i)
         }
     }
@@ -299,7 +300,10 @@
     /*  */
     if (urlopti['mode']) {
         var temp = urlopti['mode'].split(',');
-        for (var i in temp) { default_mode[i] = parseInt(temp[i]) }
+        for (var i in temp) {
+            if (temp[i].length === 0) { continue; }
+            default_mode[i] = parseInt(temp[i]);
+        }
     }
     if (default_mode[0]) { grid_f(); }
     if (default_mode[1]) { hex_f(); }
@@ -327,11 +331,11 @@
             case 'replace':
                 var getimgs = document.getElementById(this.id).src
                 getuser_select();
-                document.getElementById('temporary').src = check_src(user_select);
+                tempElm.src = check_src(user_select);
                 img_back.length = 0;
                 var map_tile = document.getElementsByName('map-tile');
                 for (var temp of map_tile) {
-                    if (temp.src === getimgs && temp.src !== document.getElementById('temporary').src) {
+                    if (temp.src === getimgs && temp.src !== tempElm.src) {
                         img_back.push([temp.id, temp.src, check_src(user_select)]);
                         temp.src = check_src(user_select);
                     }
@@ -588,8 +592,8 @@
     }
     function imgsrc_judge(id) {
         var getimgs = document.getElementById(id).src;
-        document.getElementById('temporary').src = check_src(user_select);
-        if (getimgs === document.getElementById('temporary').src) {
+        tempElm.src = check_src(user_select);
+        if (getimgs === tempElm.src) {
             return false;
         } else {
             return true;
@@ -815,7 +819,7 @@
                 if (getimgs.search(imgp) >= 0) {
                     getimgs = getimgs.substr(getimgs.search(imgp) + imgp.length).split('.')[0];
                 } else {
-                    getimgs =  '##add##' + getimgs;
+                    getimgs = '##add##' + getimgs;
                 }
                 if ((/@\d+/).test(getimgs)) {
                     valid.value = getimgs.match(/@\d+/g)[0].substr(1);
@@ -946,7 +950,7 @@
         }
         img_back.length = 0;
         try_fill_fun();
-        set_backups()
+        set_backups();
     }
 
     function try_fill_fun() {
@@ -957,8 +961,8 @@
             }
             var imgid = arr.split('/=/')[0];
             var getimgs = document.getElementById(imgid).src;
-            document.getElementById('temporary').src = check_src(user_select);
-            if (getimgs !== document.getElementById('temporary').src) {
+            tempElm.src = check_src(user_select);
+            if (getimgs !== tempElm.src) {
                 img_back.push([imgid, document.getElementById(imgid).src, check_src(user_select)]);
                 document.getElementById(imgid).src = check_src(user_select);
             }
@@ -1017,14 +1021,14 @@
             sv_arr[i] = terrain_data[0][2];
             for (var imgdaAr of terrain_data) {
                 if (savearr.search(/@\d+/) > - 1) {
-                    if (String(decodeURIComponent(savearr.replace(/@\d+/g, '#N#'))) === String(imgdaAr[0].replace('##add##', ''))) {
+                    if (String(decodeURIComponent(savearr.replace(/@\d+/g, '#N#'))) === String(decodeURIComponent(imgdaAr[0].replace('##add##', '')))) {
                         var imgval = parseInt(savearr.split('.')[0].substr(savearr.search(/@\d+/) + 1).replace(imgstr, ''));
                         sv_arr[i] = imgdaAr[1 + imgval];
                         break;
                     }
                 } else {
                     if (savearr === imgdaAr[0].replace('##add##', '')) {
-                        sv_arr[i] = imgdaAr[2]
+                        sv_arr[i] = imgdaAr[2];
                         break;
                     }
                 }
@@ -1039,12 +1043,13 @@
             password = password.replace(savereg, prsdaAr[1]);
         }
         if (hex_n_fl) {
-            password += '<' //hex
+            password += '<'; //hex
         } else {
-            password += '>' //normal
+            password += '>'; //normal
         }
         save_area.value = password;
     });
+
     function load_fun() {
         if (save_area.value.length === 0) { return; }
         var password = save_area.value;

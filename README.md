@@ -1,8 +1,8 @@
 Hakoniwa Editor / HE ENGINE
 ====
 ## Links
-[Page Link](https://thenyutheta.github.io/HE/)
-[Manual Link](https://thenyutheta.github.io/HE/manual.html)
+[Page Link](https://thenyutheta.github.io/HE/)  
+[Manual Link](https://thenyutheta.github.io/HE/manual.html)  
 ## Script Licence
 GPLv3
 ====

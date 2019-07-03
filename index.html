@@ -3,41 +3,41 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5,minimum-scale=0.3, maximum-scale=0.6,user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=0.5,minimum-scale=0.3, maximum-scale=0.6,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="page.css">
     <link rel="icon" href="./images/sys/editor_favicon.png" type="images/png">
-    <title>Hakoniwa Editor ver 0.3.2</title>
+    <title>Hakoniwa Editor ver 0.3.3</title>
 </head>
 
 <body>
     <div id="p2rfix">
-        <div id="map-area-id" class="map-area-calss"></div>
+        <div id="map-area-id" class="map-area-class"></div>
         <div id="spmess" style="position: absolute; display: none; width: 700px;">
             スクロールはボタンまたは以下の余白を使って下さい。
             <button id="sp-toleft">マップへ。</button>
             <button id="sp-toright">ツールボックスへ。</button>
         </div>
         <div id="toolbox-area-id" class="toolbox-area-class">
-            <font size="6" color="black">===[Tool Box]===</font>
-            <img id="temporary" style="display: none;">
-            <br>
-            <button style="font-size: 11px;" id="SN-btn-id">座標マスを有効にする</button>
-            <span>　</span><button style="font-size: 11px;" id="header-btn-id">ヘッダーを有効にする</button>
-            <br>
-            <button id="grid-id" style="font-size: 12px">グリッドをonにする</button>
-            <span>　</span><button id="hex-id" style="font-size: 12px">マスをhexにする</button>
-            <br>
-            <button id="back-id">前の操作へ</button>
-            &nbsp;
-            <button id="next-id">次の操作へ</button>
+            <span class="tool-title">===[Tool Box]===</span>
+            <div class="headers">
+                <img id="temporary" style="display: none;">
+                <button id="SN-btn-id">座標マスを有効にする</button>
+                <button id="header-btn-id">ヘッダーを有効にする</button>
+                <br>
+                <button id="grid-id">グリッドをonにする</button>
+                <button id="hex-id">マスをhexにする</button>
+                <br>
+                <button id="back-id">前の操作へ</button>
+                <button id="next-id">次の操作へ</button>
+            </div>
             <div class="terr-sel-class">
                 地形選択:　<select id="terrain_select"></select>
             </div>
             <div class="val_select_class">
                 値：<select id="terrain_val_select"></select>
             </div>
-            <br>
             <div id="n-pen-id" class="main-pen-class">
                 ペンの太さ：
                 <select id="pen_size_select">
@@ -73,50 +73,56 @@
             </div>
             <div class="preview-class">
                 <span style="font-size: 13px">地形プレビュー:&nbsp;</span>
-                <img id="preview-id" src="./images/=0=.png" alt="E.">
+                <img id="preview-id" src="./images/=0@1=.png" alt="E.">
+            </div>
+            <div class="syringe-class">
+                <button id="syringe-btn-id">スポイトを使う</button>
+                <br><button id="replace-btn-id">置換する</button>
+            </div>
+            <div class="select-sub">
+                <button id="select-mass-btn">マスを選択</button>
+                <button id="flip-select-btn" value="sub">選択を反転</button>
+                <button id="all-select-btn" value="sub">全選択</button>
+                <button id="all-cancel-btn" value="sub">全解除</button>
+            </div>
+            <div class="select-mass-class">
+                <button id="select-copy-btn">選択された地形をコピー</button>
+                <br>
+                <button id="select-move-btn">選択された地形を移動</button>
+                <br>
+                <button id="select-fill-btn">選択された地形を塗りつぶす</button>
+            </div>
+            <div class="maptoimage-class">
+                <button id="maptoimage-id">マップを画像に変換(ポップアップ)</button>
             </div>
             <div class="save-area-class">
                 <input type="text" id="save-area-id">
                 <br>
-                <button id="save-btn-id" style="font-size: 11px">　パスワードを生成　　</button>
-                <span>　</span><button id="load-btn-id" style="font-size: 11px">　パスワードから復元　　</button>
+                <button id="save-btn-id">パスワードを生成</button>
+                <button id="load-btn-id">パスワードから復元</button>
                 <br>
-                <button id="save-cookie-id" style="font-size: 10px">パスワードをCookieに保存</button>
-                <span>　</span><button id="load-cookie-id" style="font-size: 10px">パスワードをCookieから復元</button>
+                <button id="save-cookie-id">パスワードをCookieに保存</button>
+                <button id="load-cookie-id">パスワードをCookieから復元</button>
                 <br>
-                <button id="copy-save-id" style="font-size: 11px">パスワードをコピーする</button>
-                <span>　</span><button id="clear-text-id" style="font-size: 11px">テキストボックスをクリア</button>
-                <br> <button id="passTourl-id" style="font-size: 11px">URL生成 (ポップアップ)</button>
-            </div>
-            <div class="syringe-class">
-                <button id="syringe-btn-id" style="font-size: 12px">スポイトを使う</button>
-                <br><button id="replace-btn-id" style="font-size: 12px">置換する</button>
-            </div>
-            <div class="select-mass-class">
-                <button id="select-mass-btn" style="font-size: 12px">マスを選択</button>
-                <button id="flip-select-btn" style="display: none; font-size: 11px">選択を反転</button>
-                <button id="all-select-btn" style="display: none; font-size: 11px">全選択</button>
-                <button id="all-cancel-btn" style="display: none; font-size: 11px">全解除</button>
-                <br>
-                <button id="select-copy-btn" style="font-size: 12px">選択された地形をコピー</button>
-                <br>
-                <button id="select-move-btn" style="font-size: 12px">選択された地形を移動</button>
-                <br>
-                <button id="select-fill-btn" style="font-size: 12px">選択された地形を塗りつぶす</button>
+                <button id="copy-save-id">パスワードをコピーする</button>
+                <button id="clear-text-id">テキストボックスをクリア</button>
+                <br><button id="passTourl-id">URL生成 (ポップアップ)</button>
             </div>
             <div id="beta-id" style="display:none;">
 
             </div>
-            <a href="./manual.html" target="_blank" class="manual-class">マニュアル</a>
-            <button id="maptoimage-id" class="maptoimage-class" style="font-size: 12px">マップを画像に変換(ポップアップ)</button>
+            <div class="manual-class">
+                <a href="./manual.html" target="_blank">マニュアル</a>
+            </div>
             <div class="credit-class">
                 使用画像:
                 <a href="http://www5b.biglobe.ne.jp/~k-e-i/" target="_blank">Hakoniwa R.A.(跡地)</a> &
                 <a href="http://hakoniwa.symphonic-net.com/" target="_blank">箱庭諸島S.E(跡地)</a>
                 <br>
                 <a href="http://81.la/~uhyo/" target="_blank">箱庭諸島 GS</a>
-                <br>スクリプト:theta
             </div>
+            <!-- don't edit! -->
+            <div class="copyright">©HE Engine / thenyutheta</div>
         </div>
 
     </div>

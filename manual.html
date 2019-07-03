@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <button style="position:fixed;bottom:10px;right:10px;z-index:999;font-size: 16px;color: #2545A5;" onclick="window.scrollTo(0,0)">トップへ戻る</button>
+    <button style="position:fixed;bottom:10px;right:10px;z-index:999;font-size: 16px;color: #2545A5;"
+        onclick="window.scrollTo(0,0)">トップへ戻る</button>
     <h1>Hakoniwa Editor のマニュアル</h1>
     <a href="./index.html">＞＞ Hakoniwa Editorへ ＜＜</a>
     <h2>目次</h2>
@@ -41,7 +42,7 @@
     <br>　PC、スマホ。
     <br>
     <br>・javascript
-    <br>ES6.0以降。
+    <br>　ES6.0以降。
     <br>
     <br>・ブラウザ
     <br>　chrome, iron 等の chromium を推奨。
@@ -135,7 +136,8 @@
             <td></td>
         </tr>
     -->
-    <br><table border="1">
+    <br>
+    <table border="1">
         <tr>
             <th>パラメータ</th>
             <th>説明</th>
@@ -159,12 +161,17 @@
         <tr>
             <td>theme</td>
             <td>メインの背景色と、ツールボックスの背景色を設定。rgbは"#"を"$"に変える。</td>
-            <td>theme=MainBGColor,ToolsBGColor
-                <br>例1　theme=blue,green
-                <br>例2　theme=$E1D2C3,$2F3E4D
+            <td>theme=MainBGColor,ToolsBGColor,MapColor
+                <br>例1　theme=blue,green,red
+                <br>例2　theme=$E1D2C3,$2F3E1D,$00424D
                 <br>何も指定しないとdefaultの設定を使用する。
-                <br>theme=,blue (ToolsBGColorの設定だけ変更。)
+                <br>theme=,blue, (ToolsBGColorの設定だけ変更。)
             </td>
+        </tr>
+        <tr>
+            <td>theme</td>
+            <td>Mapの後ろに指定した画像を配置。themeのMapColorを上書きする。</td>
+            <td>theme=${image_url}</td>
         </tr>
         <tr>
             <td>mode</td>
@@ -561,6 +568,18 @@
     <br>
     <br> 
     -->
+    <font size="5">・ver 0.3.3</font>
+    <br>地形の変更 : 空白タイルに黒、透明を追加(値:2,3)
+    <br>機能の変更 :
+    <br>UIの大きな改善。
+    <br>?themeにmapの裏の色指定を追加。
+    <br>?map_imgを追加。
+    <br>
+    <br>その他の変更 :
+    <br>javascriptの小さな修正。
+    <br>LICENSEを追加。
+    <br>
+    <br>
     <font size="5">・ver 0.3.2</font>
     <br>地形の変更 : 公孫樹/桜を追加。
     <br>機能の変更 :

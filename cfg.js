@@ -8,8 +8,11 @@ var img_mess = 'クリックで書換え';
 
 var back_max = 20;
 var default_mode = [0, 1, 1, 1];//grid,hex,sn,header
-var default_tile = 1;
+var default_tile = 1;//index of terrain data
+var default_val = 1;//1~99
 var grid_style = '1px solid black';
 var select_style = ['1px solid #1F7F20', '1px solid #FF0000', '1px solid #00F1FF'];//off,on,基準点
 
 var sn_max = 19;
+
+var canset_mode = [1, 1, 1, 1];//grid,hex,sn,header

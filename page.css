@@ -4,9 +4,10 @@ body {
     --width-pos: 640px;
     left: -8px;
     top: -8px;
+    width : 100%;
 }
 
-.map-area-calss {
+.map-area-class {
     position: absolute;
     width: calc(var(--width-pos) + 0px);
     top: 1px;
@@ -23,24 +24,42 @@ body {
     top: 0px;
     left: calc(var(--width-pos) + 20px);
     background-color: rgb(97, 255, 181);
-    width: 320px;
+    width: 25%;
     height: 100%;
 }
 
+.tool-title{
+    font-size: 200%;
+}
+
+.headers{
+    position: relative;
+    top: 0px;
+}
+
+.headers button{
+    font-size: 12px;
+    width: 45%;
+}
+
 .terr-sel-class{
-    position: absolute;
-    top: 130px;
+    position: relative;
+    top: 10px;
+}
+
+.terr-sel-class select,option{
+    width: 60%;
 }
 
 .val_select_class {
-    position: absolute;
-    top: 160px;
+    position: relative;
+    top: 10px;
 }
 
 .main-pen-class {
-    position: absolute;
-    top: 160px;
-    left: 105px;
+    position: relative;
+    top: 10px;
+    left: 0px;
 }
 
 .sub-pen-class {
@@ -48,40 +67,73 @@ body {
 }
 
 .preview-class {
-    position: absolute;
-    top: 195px;
+    position: relative;
+    top: 20px;
 }
 
-.syringe-class {
-    position: absolute;
-    top: 240px;
+.syringe-class{
+    position: relative;
+    top: 20px;
 }
-
-.select-mass-class {
-    position: absolute;
-    top: 350px;
-}
-
-.maptoimage-class {
-    position: absolute;
+.syringe-class button{
     font-size: 12px;
-    top: 465px;
+    width: 70%;
 }
 
-.save-area-class {
-    position: absolute;
-    top: 495px;
-    left: 0px;
-    line-height: 22px;
+.select-mass-class{
+    position: relative;
+    top: 30px;
+}
+.select-mass-class button{
+    font-size: 12px;
+    width: 70%;
+}
+
+.select-sub{
+    position: relative;
+    top: 30px;
+}
+.select-sub button{
+    font-size: 12px;
+    width: 20%;
+}
+
+.maptoimage-class{
+    position: relative;
+    top: 40px;
+}
+.maptoimage-class button{
+    font-size: 12px;
+    width: 70%;
+}
+
+.save-area-class{
+    position: relative;
+    top: 50px;
+}
+.save-area-class button{
+    font-size: 10px;
+    line-height: 2.2;
+    width : 40%;
+}
+.save-area-class input{
+    width : 39%;
 }
 
 .manual-class {
-    position: absolute;
-    top: 615px;
+    position: relative;
+    top: 50px;
+    font-size: 14px;
 }
 
 .credit-class {
-    position: absolute;
-    top: 645px;
+    position: relative;
+    top: 50px;
+    font-size: 11px;
+}
+
+.copyright {
+    position: relative;
+    top: 50px;
     font-size: 11px;
 }

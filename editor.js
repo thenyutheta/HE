@@ -190,6 +190,7 @@
         var temp = urlopti['theme'].split(',');
         if (temp[0] && temp[0].length !== 0) { document.body.style.backgroundColor = temp[0].replace('$', '#'); };
         if (temp[1] && temp[1].length !== 0) { document.getElementById('toolbox-area-id').style.backgroundColor = temp[1].replace('$', '#'); };
+        if (temp[2] && temp[2].length !== 0) { mapdiv.style.backgroundColor = temp[2].replace('$', '#'); };
     }
     if (urlopti['add_data']) {
         var temp = urlopti['add_data'].split('${a}');
@@ -207,7 +208,13 @@
             pattern_press.push([i[0], i[1]]);
         }
     }
+    if (urlopti['map_img']) {
+        mapdiv.style.backgroundImage = 'url(' + urlopti["map_img"] + ')';
+    }
     //if (urlopti['']) {}
+    for (var dox of $('.select-sub button[value="sub"]')) {
+        dox.style.display = "none";
+    }
     var i = 0;
     for (var imgdaAr of terrain_data) {
         var creopti = document.createElement('option');
@@ -219,10 +226,6 @@
         terrainid.appendChild(creopti);
         i++;
     }
-    preview.width = imgsize;
-    preview.height = imgsize;
-    getuser_select();
-    preview.src = check_src(user_select);
 
     set_values(valid, 1, 99);
     function set_values(elm, min, max) {
@@ -233,6 +236,11 @@
             elm.appendChild(creopti);
         }
     }
+
+    preview.width = imgsize;
+    preview.height = imgsize;
+    getuser_select();
+    preview.src = check_src(user_select);
 
     //Set map tiles
     var crediv = document.createElement('div');
@@ -266,7 +274,7 @@
             cre_chdiv();
         }
         var child_img = document.createElement('img');
-        child_img.src = check_src(terrain_data[default_tile][0]);
+        child_img.src = check_src(terrain_data[default_tile][0].replace("#N#", "@" + default_val));
         child_img.alt = 'E.';
         child_img.id = imgx + ' - ' + imgy;
         child_img.name = 'map-tile';
@@ -297,7 +305,7 @@
             document.getElementById('line-' + imgy).appendChild(hex_img);
         }
     }
-    /*  */
+
     if (urlopti['mode']) {
         var temp = urlopti['mode'].split(',');
         for (var i in temp) {
@@ -313,6 +321,11 @@
         save_area.value = urlopti['pass'];
         load_fun();
     }
+    if (!canset_mode[0]) { gridcfg.style.display = "none" }
+    if (!canset_mode[1]) { hexcfg.style.display = "none" }
+    if (!canset_mode[2]) { sn_btn.style.display = "none" }
+    if (!canset_mode[3]) { header_btn.style.display = "none" }
+
     const u_a = navigator.userAgent.toUpperCase();
     if (!/Macintosh/i.test(u_a) && !/Windows/i.test(u_a) && (!/X11.+Linux/i.test(u_a))) {
         flag_smart = true;

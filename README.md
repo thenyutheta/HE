@@ -1,12 +1,12 @@
 Hakoniwa Editor / HE ENGINE
 ====
-##Links
+## Links
 [Page Link](https://thenyutheta.github.io/HE/)
 [Manual Link](https://thenyutheta.github.io/HE/manual.html)
 ## Script Licence
 GPLv3
 ====
-##概要
+## 概要
 操作方法などはマニュアルをお読みください。
 cfg.js, data.jsを書き換え、画像を用意すれば、ほかのEditorにもなるかもしれません。
 

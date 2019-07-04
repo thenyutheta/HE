@@ -208,8 +208,20 @@
             pattern_press.push([i[0], i[1]]);
         }
     }
-    if (urlopti['map_img']) {
-        mapdiv.style.backgroundImage = 'url(' + urlopti["map_img"] + ')';
+    if (urlopti['bgimg']) {
+        var temp = urlopti['bgimg'].split(',');
+        if (temp[0] && temp[0].length !== 0) {
+            document.body.style.backgroundImage = 'url(' + temp[0] + ')';
+            document.body.style.backgroundSize = "cover";
+        };
+        if (temp[1] && temp[1].length !== 0) {
+            document.getElementById('toolbox-area-id').style.backgroundImage = 'url(' + temp[1] + ')';
+            document.getElementById('toolbox-area-id').style.backgroundSize = "cover";
+        };
+        if (temp[2] && temp[2].length !== 0) {
+            mapdiv.style.backgroundImage = 'url(' + temp[2] + ')';
+            mapdiv.style.backgroundSize = "cover";
+        };
     }
     //if (urlopti['']) {}
     for (var dox of $('.select-sub button[value="sub"]')) {
